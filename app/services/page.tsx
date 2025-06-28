@@ -279,10 +279,17 @@ export default function ServicesPage() {
           <p className="text-xl text-brand-dark/80 mb-8 max-w-2xl mx-auto">
             Contact us today to discuss your project and get a free consultation
           </p>
-          <Button size="lg" className="bg-brand-dark hover:bg-brand-dark/90 text-white">
+          <a
+            href="https://wa.me/94719089368?text=Hi%20I%20am%20interested%20in%20starting%20a%20project"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button size="lg" className="bg-brand-dark hover:bg-brand-dark/90 text-white">
             Get Free Quote
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
+          </a>
+          
         </div>
       </section>
     </div>

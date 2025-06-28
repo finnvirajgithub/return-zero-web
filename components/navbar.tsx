@@ -81,7 +81,14 @@ export default function Navbar() {
                 </Link>
               ))}
               <div className="px-3 py-2">
-                <Button className="w-full bg-brand-yellow hover:bg-brand-yellow/90 text-brand-dark">Get Quote</Button>
+                <a
+                  href="https://wa.me/94719089368?text=Hi%2C%20I'm%20interested%20in%20getting%20a%20quote"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-brand-yellow px-4 py-2 text-brand-dark hover:bg-brand-yellow/90 transition"
+                >
+                  Get Quote
+                </a>
               </div>
             </div>
           </div>

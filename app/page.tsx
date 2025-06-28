@@ -46,21 +46,21 @@ export default function HomePage() {
 
   const testimonials = [
     {
-      name: "Sarah Johnson",
-      role: "Travel Agency Owner",
-      content: "Return Zero Solutions transformed our online presence. Our bookings increased by 300% within 6 months!",
+      name: "Indika",
+      role: "Ceylon Best Travels Owner",
+      content: "Thank you very much Malli, you did a great job, everyone said it was great.",
       rating: 5,
     },
     {
-      name: "Michael Chen",
-      role: "Hotel Manager",
+      name: "Ayesh",
+      role: "The Islanders Owner",
       content: "They helped us get listed on all major booking platforms. Professional service and excellent results.",
       rating: 5,
     },
     {
-      name: "Emma Davis",
-      role: "Restaurant Owner",
-      content: "The website they built for us is beautiful and functional. Highly recommend their services!",
+      name: "Dhanushka",
+      role: "Sri Lanka Vivid Tours Owner",
+      content: "They Succesfully claimed my tripadvisor account. Highly recommend their services!",
       rating: 5,
     },
   ]
@@ -207,6 +207,7 @@ export default function HomePage() {
               marketing services
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="/contact">
               <Button
                 size="lg"
                 className="bg-brand-yellow hover:bg-brand-yellow/90 text-brand-dark transform hover:scale-105 transition-transform"
@@ -214,13 +215,18 @@ export default function HomePage() {
                 Get Started
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-brand-dark text-brand-dark hover:bg-brand-dark hover:text-white bg-transparent transform hover:scale-105 transition-transform"
-              >
+              </a>
+              
+              <a href="/projects" className="inline-block">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-brand-dark text-brand-dark hover:bg-brand-dark hover:text-white bg-transparent transform hover:scale-105 transition-transform"
+                >
                 View Our Work
-              </Button>
+                </Button>
+              </a>
+              
             </div>
           </div>
         </div>
@@ -341,9 +347,17 @@ export default function HomePage() {
             Let's discuss how we can help you achieve your digital goals and grow your business online.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-brand-dark hover:bg-brand-dark/90 text-white">
+            <a
+              href="https://wa.me/94719089368?text=Hi%20I%20am%20interested%20in%20starting%20a%20project"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button size="lg" className="bg-brand-dark hover:bg-brand-dark/90 text-white">
               Get Free Consultation
-            </Button>
+              </Button>
+            </a>
+            
+            <a href="/projects">
             <Button
               size="lg"
               variant="outline"
@@ -351,6 +365,8 @@ export default function HomePage() {
             >
               View Portfolio
             </Button>
+            </a>
+            
           </div>
         </div>
       </section>

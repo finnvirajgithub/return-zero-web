@@ -18,13 +18,10 @@ export default function Footer() {
               marketing services for travel and hospitality industries.
             </p>
             <div className="flex space-x-4">
-              <Link href="#" className="text-gray-300 hover:text-brand-yellow transition-colors">
+              <Link href="https://www.facebook.com/profile.php?id=61561737224959" className="text-gray-300 hover:text-brand-yellow transition-colors">
                 <Facebook className="h-5 w-5" />
               </Link>
-              <Link href="#" className="text-gray-300 hover:text-brand-yellow transition-colors">
-                <Twitter className="h-5 w-5" />
-              </Link>
-              <Link href="#" className="text-gray-300 hover:text-brand-yellow transition-colors">
+              <Link href="https://www.linkedin.com/company/return-zero-solutions/" className="text-gray-300 hover:text-brand-yellow transition-colors">
                 <Linkedin className="h-5 w-5" />
               </Link>
             </div>
@@ -63,15 +60,15 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-center space-x-2">
                 <Mail className="h-4 w-4 text-brand-yellow" />
-                <span className="text-gray-300">info@returnzerosolutions.com</span>
+                <span className="text-gray-300">returnzerosolutions.info@gmail.com</span>
               </li>
               <li className="flex items-center space-x-2">
                 <Phone className="h-4 w-4 text-brand-yellow" />
-                <span className="text-gray-300">+1 (555) 123-4567</span>
+                <span className="text-gray-300">+94 71 908 9368</span>
               </li>
               <li className="flex items-center space-x-2">
                 <MapPin className="h-4 w-4 text-brand-yellow" />
-                <span className="text-gray-300">123 Tech Street, Digital City</span>
+                <span className="text-gray-300">Ampitiya road, Kandy</span>
               </li>
             </ul>
           </div>
