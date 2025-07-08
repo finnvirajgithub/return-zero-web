@@ -40,7 +40,7 @@ export default function ContactPage() {
 
   try {
     const result = await emailjs.send(
-      'service_s1512in',
+      'service_ggas074',
       'template_5rpsjvk',
       templateParams,
       '-slcF47WslD-a1KcO'
@@ -76,7 +76,7 @@ export default function ContactPage() {
     {
       icon: <Mail className="h-6 w-6" />,
       title: "Email Us",
-      details: "returnzerosolutions.info@gmail.com",
+      details: "contact@returnzeroitsolutions.com",
       description: "Send us an email anytime",
     },
     {
