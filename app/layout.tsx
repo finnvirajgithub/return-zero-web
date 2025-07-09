@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   description:
     "Professional web development, software solutions, and digital marketing services for travel agents and hotels.",
   generator: "v0.dev",
+  icons: {
+    icon: "/images/logo.jpg", // This will use the favicon in the public folder
+  },
 }
 
 export default function RootLayout({
