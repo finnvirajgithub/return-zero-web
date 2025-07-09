@@ -40,7 +40,7 @@ export default function ContactPage() {
 
   try {
     const result = await emailjs.send(
-      'service_ggas074',
+      'service_oivhlqt',
       'template_5rpsjvk',
       templateParams,
       '-slcF47WslD-a1KcO'
