@@ -83,7 +83,7 @@ export default function ContactPage() {
       icon: <Phone className="h-6 w-6" />,
       title: "Call Us",
       details: "+94 71 908 9368",
-      description: "Mon-Fri from 8am to 5pm",
+      description: "24/7",
     },
     {
       icon: <MapPin className="h-6 w-6" />,
@@ -94,7 +94,7 @@ export default function ContactPage() {
     {
       icon: <Clock className="h-6 w-6" />,
       title: "Working Hours",
-      details: "Mon - Fri: 8:00 AM - 6:00 PM",
+      details: "24/7",
       description: "Weekend support available",
     },
   ]
