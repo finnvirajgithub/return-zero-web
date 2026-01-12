@@ -50,7 +50,7 @@ export default function ProjectsPage() {
       description:
         "End-to-end digital transformation covering website design, SEO, and TripAdvisor management.",
       link: "https://ceylonmstours.com",
-      image: "/images/islanders.jpg?height=300&width=400",
+      image: "/images/ceylonms.jpg?height=300&width=400",
       technologies: ["Free Web Hosting","Tripadvisor", "SEO"],
       results: ["300% surge in online reservations", "Consistently in the top 3 for local travel searches", "More than 50 excellent TripAdvisor ratings"],
       year: "2025",
@@ -63,9 +63,9 @@ export default function ProjectsPage() {
       category: "Travel Agency",
       description:
         "Book unforgettable tours with Crown Tours & Travels through Viator’s trusted platform.",
-      link: "https://www.viator.com/tours/Kalpitiya/Kitesurfing-Course-and-Wilpattu-Safari-with-Private-Transport/d51635-327804P7",
-      image: "/images/crownviator.png?height=300&width=400",
-      technologies: ["Viator","Tripadvisor"],
+      link: "https://www.crowntourssrianka.com",
+      image: "/images/crowntours.jpg?height=300&width=400",
+      technologies: ["Web Hosting","Viator","Tripadvisor"],
       results: ["Expanded global reach with increased online bookings via Viator", "Enhanced credibility through a verified and professional digital presence"],
       year: "2025",
       client: "Crown tours & travels | Kalpitiya, Sri Lanka",
