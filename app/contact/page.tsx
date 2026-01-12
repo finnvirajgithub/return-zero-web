@@ -40,7 +40,7 @@ export default function ContactPage() {
 
   try {
     const result = await emailjs.send(
-      'service_oivhlqt',
+      'service_4np4c87',
       'template_5rpsjvk',
       templateParams,
       '-slcF47WslD-a1KcO'
@@ -76,7 +76,7 @@ export default function ContactPage() {
     {
       icon: <Mail className="h-6 w-6" />,
       title: "Email Us",
-      details: "contact@returnzeroitsolutions.com",
+      details: "returnzeroitsolutions.info@gmail.com",
       description: "Send us an email anytime",
     },
     {
@@ -319,7 +319,7 @@ export default function ContactPage() {
                       <div className="text-sm text-gray-300">Success Rate</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-brand-yellow">150+</div>
+                      <div className="text-2xl font-bold text-brand-yellow">50+</div>
                       <div className="text-sm text-gray-300">Projects Done</div>
                     </div>
                     <div className="text-center">
