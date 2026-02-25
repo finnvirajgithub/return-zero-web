@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Code, Globe, Smartphone, TrendingUp, ArrowRight, CheckCircle, Star } from "lucide-react"
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
+import Autoplay from "embla-carousel-autoplay"
 
 export default function HomePage() {
   const [isVisible, setIsVisible] = useState(false)
@@ -63,7 +65,30 @@ export default function HomePage() {
       content: "They Succesfully claimed my tripadvisor account. Highly recommend their services!",
       rating: 5,
     },
-    
+    {
+      name: "Pradeep",
+      role: "Adventure Tours Sri Lanka Owner",
+      content: "Outstanding website development and SEO optimization. Our bookings increased significantly within 3 months.",
+      rating: 5,
+    },
+    {
+      name: "Kavya",
+      role: "Tropical Paradise Hotel Manager",
+      content: "The integration with Booking.com and Airbnb was seamless. Their team was professional and responsive throughout.",
+      rating: 5,
+    },
+    {
+      name: "Rohan",
+      role: "Sri Lanka Adventure Travel Owner",
+      content: "Excellent customer support and timely delivery. They went above and beyond to ensure our satisfaction.",
+      rating: 5,
+    },
+    {
+      name: "Lakshmi",
+      role: "Heritage Tours Operator",
+      content: "Their digital solutions transformed our business. Highly professional and knowledgeable team!",
+      rating: 5,
+    },
   ]
 
   return (
@@ -319,24 +344,41 @@ export default function HomePage() {
             <h2 className="text-3xl md:text-4xl font-bold text-brand-dark mb-4">What Our Clients Say</h2>
             <p className="text-xl text-gray-600">Don't just take our word for it - hear from our satisfied clients</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-5 w-5 text-brand-yellow fill-current" />
-                    ))}
-                  </div>
-                  <p className="text-gray-600 mb-4">"{testimonial.content}"</p>
-                  <div>
-                    <div className="font-semibold text-brand-dark">{testimonial.name}</div>
-                    <div className="text-sm text-gray-500">{testimonial.role}</div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <Carousel
+            opts={{
+              align: "center",
+              loop: true,
+            }}
+            plugins={[
+              Autoplay({
+                delay: 5000,
+              }),
+            ]}
+            className="w-full"
+          >
+            <CarouselContent className="px-4">
+              {testimonials.map((testimonial, index) => (
+                <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                  <Card className="h-full hover:shadow-lg transition-shadow">
+                    <CardContent className="p-6 flex flex-col h-full">
+                      <div className="flex mb-4">
+                        {[...Array(testimonial.rating)].map((_, i) => (
+                          <Star key={i} className="h-5 w-5 text-brand-yellow fill-current" />
+                        ))}
+                      </div>
+                      <p className="text-gray-600 mb-4 flex-grow">"{testimonial.content}"</p>
+                      <div className="mt-auto">
+                        <div className="font-semibold text-brand-dark">{testimonial.name}</div>
+                        <div className="text-sm text-gray-500">{testimonial.role}</div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="hidden sm:flex" />
+            <CarouselNext className="hidden sm:flex" />
+          </Carousel>
         </div>
       </section>
 
