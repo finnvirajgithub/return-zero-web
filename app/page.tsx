@@ -348,7 +348,6 @@ export default function HomePage() {
             opts={{
               align: "center",
               loop: true,
-              direction: "rtl",
             }}
             plugins={[
               Autoplay({
