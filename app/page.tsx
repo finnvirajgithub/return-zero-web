@@ -63,6 +63,7 @@ export default function HomePage() {
       content: "They Succesfully claimed my tripadvisor account. Highly recommend their services!",
       rating: 5,
     },
+    
   ]
 
   return (
