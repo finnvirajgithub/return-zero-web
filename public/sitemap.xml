@@ -1,9 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Home Page -->
   <url>
     <loc>https://returnzerosolutions.com/</loc>
     <lastmod>2026-09-18</lastmod>
     <priority>1.0</priority>
   </url>
-  <!-- ඔයාගේ සයිට් එකේ තව pages තියෙනවා නම් (උදා: about, contact) ඒවත් මේ විදිහටම add කරන්න -->
+
+  <!-- Services Page -->
+  <url>
+    <loc>https://returnzerosolutions.com/services</loc>
+    <lastmod>2026-09-18</lastmod>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Projects Page -->
+  <url>
+    <loc>https://returnzerosolutions.com/projects</loc>
+    <lastmod>2026-09-18</lastmod>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Careers Page -->
+  <url>
+    <loc>https://returnzerosolutions.com/careers</loc>
+    <lastmod>2026-09-18</lastmod>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Contact Page -->
+  <url>
+    <loc>https://returnzerosolutions.com/contact</loc>
+    <lastmod>2026-09-18</lastmod>
+    <priority>0.7</priority>
+  </url>
+
 </urlset>
