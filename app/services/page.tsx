@@ -73,7 +73,7 @@ export default function ServicesPage() {
     {
       icon: <MapPin className="h-8 w-8" />,
       title: "Platform Integration",
-      description: "Integration with major travel booking platforms",
+      description: "Integration with major travel booking platforms like Viator & GYG",
     },
   ]
 
@@ -103,6 +103,16 @@ export default function ServicesPage() {
       title: "Review Management",
       description: "Monitor and improve your online reputation",
     },
+  ]
+
+  const platforms = [
+    { name: "TripAdvisor", logo: "/logos/tripadvisor.png" },
+    { name: "Viator", logo: "/logos/viator.png" },
+    { name: "GetYourGuide", logo: "/logos/gyg.png" },
+    { name: "Booking.com", logo: "/logos/booking.png" },
+    { name: "Airbnb", logo: "/logos/airbnb.png" },
+    { name: "Agoda", logo: "/logos/agoda.png" },
+    { name: "Expedia", logo: "/logos/expedia.png" },
   ]
 
   const process = [
@@ -246,6 +256,54 @@ export default function ServicesPage() {
                   <CardDescription className="text-center">{service.description}</CardDescription>
                 </CardContent>
               </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Platform Integrations Content & Logos Section */}
+      <section className="py-16 bg-white border-y border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          
+          {/* SEO Content Block */}
+          <div className="mb-14">
+            <h2 className="text-3xl md:text-4xl font-bold text-brand-dark mb-6">
+              OTA Profile Setup & Optimization
+            </h2>
+            <p className="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
+              Maximize your bookings and digital footprint with our expert Online Travel Agency (OTA) management services. 
+              We specialize in creating, optimizing, and managing business profiles across top global travel platforms. 
+              By utilizing strategic SEO techniques, high-converting tour descriptions, and effective review management, 
+              we ensure your travel agency or hotel ranks higher on search results. Whether it is increasing your visibility 
+              on TripAdvisor, driving more tour sales on Viator and GetYourGuide, or boosting room occupancy through Booking.com, 
+              Airbnb, Agoda, and Expedia, we provide the complete digital infrastructure for your tourism business to thrive.
+            </p>
+          </div>
+
+          {/* Logos */}
+          <div className="text-center mb-10">
+            <p className="text-sm font-semibold text-gray-400 uppercase tracking-widest">
+              Platforms We Optimize & Manage
+            </p>
+          </div>
+          <div className="flex flex-wrap justify-center items-center gap-10 md:gap-20">
+            {platforms.map((platform, index) => (
+              <div 
+                key={index} 
+                className="w-40 h-20 md:w-52 md:h-24 relative flex items-center justify-center transition-transform duration-300 hover:scale-110"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={platform.logo}
+                  alt={`${platform.name} Optimization Services`}
+                  className="max-w-full max-h-full object-contain"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.nextSibling.style.display = 'block';
+                  }}
+                />
+                <span className="hidden font-bold text-gray-400 text-lg">{platform.name}</span>
+              </div>
             ))}
           </div>
         </div>

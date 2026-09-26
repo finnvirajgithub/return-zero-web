@@ -40,9 +40,9 @@ export default function HomePage() {
   ]
 
   const stats = [
-    { number: "20+", label: "Projects Completed" },
-    { number: "10+", label: "Happy Clients" },
-    { number: "2+", label: "Years Experience" },
+    { number: "70+", label: "Projects Completed" },
+    { number: "50+", label: "Happy Clients" },
+    { number: "5+", label: "Years Experience" },
     { number: "24/7", label: "Support Available" },
   ]
 
