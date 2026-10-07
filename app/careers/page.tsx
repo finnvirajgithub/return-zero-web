@@ -1,8 +1,7 @@
 "use client"
 
 import type React from "react"
-
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -27,6 +26,8 @@ import {
   GraduationCap,
   ArrowRight,
   CheckCircle,
+  Code,
+  MessageCircle // <-- මේක තමයි අමතක වෙලා තිබුණේ
 } from "lucide-react"
 import emailjs from "@emailjs/browser"
 
@@ -175,6 +176,7 @@ const benefits = [
 ]
 
 export default function CareersPage() {
+  const [isVisible, setIsVisible] = useState(false)
   const [selectedJob, setSelectedJob] = useState<JobPosition | null>(null)
   const [isApplying, setIsApplying] = useState(false)
   const [applicationSubmitted, setApplicationSubmitted] = useState(false)
@@ -185,6 +187,10 @@ export default function CareersPage() {
     portfolio: "",
     message: "",
   })
+
+  useEffect(() => {
+    setIsVisible(true)
+  }, [])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -242,45 +248,50 @@ export default function CareersPage() {
   }
 
   return (
-    <div className="pt-16">
+    <div className="pt-16 min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-brand-yellow/10 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Badge className="mb-4 bg-brand-yellow/10 text-brand-yellow border-brand-yellow">Join Our Team</Badge>
-          <h1 className="text-4xl md:text-5xl font-bold text-brand-dark mb-6">Build Your Career With Us</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Join Return Zero Solutions and be part of a team that's transforming businesses in the travel and
-            hospitality industry. We're always looking for talented individuals who share our passion for innovation.
+      <section className="relative py-24 md:py-32 bg-brand-dark text-white overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]"></div>
+        
+        <div className={`relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center transition-all duration-1000 ${isVisible ? "animate-fade-in translate-y-0" : "opacity-0 translate-y-10"}`}>
+          <Badge className="mb-6 bg-brand-yellow/20 text-brand-yellow border-brand-yellow px-4 py-1 text-sm font-bold uppercase tracking-wider">
+            Careers at Return Zero
+          </Badge>
+          <h1 className="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight">
+            Build Your Future With <span className="text-brand-yellow">Us</span>
+          </h1>
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed mb-10">
+            Join a forward-thinking team engineering the next generation of software and travel tech solutions. We're looking for passionate individuals ready to make an impact.
           </p>
           <a href="#positions">
-            <Button size="lg" className="bg-brand-yellow hover:bg-brand-yellow/90 text-brand-dark">
+            <Button size="lg" className="bg-brand-yellow hover:bg-brand-yellow/90 text-brand-dark font-bold rounded-full px-8 shadow-lg transform hover:-translate-y-1 transition-all">
+              <Code className="mr-2 h-5 w-5" />
               View Open Positions
-              <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </a>
         </div>
       </section>
 
       {/* Why Join Us Section */}
-      <section className="py-20">
+      <section className="py-24 bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-brand-dark mb-4">Why Join Return Zero Solutions?</h2>
+            <h2 className="text-3xl md:text-5xl font-bold text-brand-dark mb-4">Life at Return Zero</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              We offer more than just a job - we offer a career with growth, flexibility, and purpose
+              We offer more than just a job — we provide an environment where you can learn, grow, and thrive.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {benefits.map((benefit, index) => (
-              <Card key={index} className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-2">
+              <Card key={index} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-gray-100 bg-gray-50">
                 <CardHeader>
-                  <div className="p-3 bg-brand-yellow/10 rounded-full text-brand-yellow w-fit group-hover:bg-brand-yellow group-hover:text-white transition-colors">
+                  <div className="p-4 bg-white rounded-2xl text-brand-yellow w-fit shadow-sm group-hover:scale-110 group-hover:bg-brand-yellow group-hover:text-white transition-all duration-300">
                     {benefit.icon}
                   </div>
-                  <CardTitle className="text-xl mt-4">{benefit.title}</CardTitle>
+                  <CardTitle className="text-xl mt-4 font-bold text-brand-dark">{benefit.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription>{benefit.description}</CardDescription>
+                  <CardDescription className="text-base text-gray-600">{benefit.description}</CardDescription>
                 </CardContent>
               </Card>
             ))}
@@ -289,52 +300,57 @@ export default function CareersPage() {
       </section>
 
       {/* Open Positions Section */}
-      <section id="positions" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="positions" className="py-24 bg-gray-50">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-brand-dark mb-4">Open Positions</h2>
+            <h2 className="text-3xl md:text-5xl font-bold text-brand-dark mb-4">Open Roles</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Find your perfect role and start your journey with us
+              Find your perfect fit and start your engineering journey.
             </p>
           </div>
+          
           <div className="space-y-6">
             {jobPositions.map((job) => (
               <Card
                 key={job.id}
-                className="hover:shadow-lg transition-shadow cursor-pointer"
+                className="group hover:shadow-xl transition-all duration-300 border-gray-200 bg-white cursor-pointer hover:-translate-y-1"
                 onClick={() => setSelectedJob(job)}
               >
-                <CardContent className="p-6">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <CardContent className="p-8">
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                     <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Briefcase className="h-5 w-5 text-brand-yellow" />
-                        <h3 className="text-xl font-semibold text-brand-dark">{job.title}</h3>
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="p-2 bg-brand-yellow/10 rounded-lg">
+                          <Briefcase className="h-6 w-6 text-brand-yellow" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-brand-dark group-hover:text-brand-yellow transition-colors">{job.title}</h3>
                       </div>
-                      <p className="text-gray-600 mb-4 line-clamp-2">{job.description}</p>
-                      <div className="flex flex-wrap gap-3">
-                        <Badge variant="secondary" className="flex items-center gap-1">
-                          <Users className="h-3 w-3" />
+                      <p className="text-gray-600 mb-5 text-base leading-relaxed line-clamp-2 pr-4">{job.description}</p>
+                      <div className="flex flex-wrap gap-2">
+                        <Badge variant="secondary" className="bg-gray-100 text-gray-700 px-3 py-1 flex items-center gap-1.5">
+                          <Users className="h-3.5 w-3.5" />
                           {job.department}
                         </Badge>
-                        <Badge variant="secondary" className="flex items-center gap-1">
-                          <MapPin className="h-3 w-3" />
+                        <Badge variant="secondary" className="bg-gray-100 text-gray-700 px-3 py-1 flex items-center gap-1.5">
+                          <MapPin className="h-3.5 w-3.5" />
                           {job.location}
                         </Badge>
-                        <Badge variant="secondary" className="flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
+                        <Badge variant="secondary" className="bg-gray-100 text-gray-700 px-3 py-1 flex items-center gap-1.5">
+                          <Clock className="h-3.5 w-3.5" />
                           {job.type}
                         </Badge>
-                        <Badge variant="secondary" className="flex items-center gap-1">
-                          <DollarSign className="h-3 w-3" />
+                        <Badge variant="secondary" className="bg-green-100 text-green-700 px-3 py-1 flex items-center gap-1.5 font-semibold">
+                          <DollarSign className="h-3.5 w-3.5" />
                           {job.salary}
                         </Badge>
                       </div>
                     </div>
-                    <Button className="bg-brand-yellow hover:bg-brand-yellow/90 text-brand-dark whitespace-nowrap">
-                      View Details
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
+                    <div className="mt-4 md:mt-0">
+                      <Button className="w-full md:w-auto bg-brand-dark text-white group-hover:bg-brand-yellow group-hover:text-brand-dark transition-all rounded-full px-6">
+                        View Role
+                        <ArrowRight className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -343,141 +359,111 @@ export default function CareersPage() {
         </div>
       </section>
 
-      {/* Job Detail Dialog */}
+      {/* Job Detail Dialog (Popup) */}
       <Dialog open={!!selectedJob} onOpenChange={handleDialogClose}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto p-0 bg-white rounded-2xl">
           {selectedJob && (
             <>
-              <DialogHeader>
-                <DialogTitle className="text-2xl text-brand-dark">{selectedJob.title}</DialogTitle>
-                <DialogDescription className="flex flex-wrap gap-2 pt-2">
-                  <Badge variant="secondary">{selectedJob.department}</Badge>
-                  <Badge variant="secondary">{selectedJob.location}</Badge>
-                  <Badge variant="secondary">{selectedJob.type}</Badge>
+              <DialogHeader className="p-8 pb-0 bg-gray-50 border-b border-gray-100 rounded-t-2xl">
+                <DialogTitle className="text-3xl font-bold text-brand-dark mb-4">{selectedJob.title}</DialogTitle>
+                <DialogDescription className="flex flex-wrap gap-2 pb-6">
+                  <Badge variant="outline" className="border-gray-300 text-gray-600 bg-white">{selectedJob.department}</Badge>
+                  <Badge variant="outline" className="border-gray-300 text-gray-600 bg-white">{selectedJob.location}</Badge>
+                  <Badge variant="outline" className="border-gray-300 text-gray-600 bg-white">{selectedJob.type}</Badge>
                 </DialogDescription>
               </DialogHeader>
-              <div className="space-y-6 py-4">
+              
+              <div className="p-8 space-y-8">
                 <div>
-                  <h4 className="font-semibold text-brand-dark mb-2">About the Role</h4>
-                  <p className="text-gray-600">{selectedJob.description}</p>
+                  <h4 className="text-xl font-bold text-brand-dark mb-3 border-b border-gray-100 pb-2">Role Overview</h4>
+                  <p className="text-gray-600 leading-relaxed text-lg">{selectedJob.description}</p>
                 </div>
-                <div>
-                  <h4 className="font-semibold text-brand-dark mb-2">Requirements</h4>
-                  <ul className="space-y-2">
-                    {selectedJob.requirements.map((req, index) => (
-                      <li key={index} className="flex items-start gap-2 text-gray-600">
-                        <CheckCircle className="h-5 w-5 text-brand-yellow flex-shrink-0 mt-0.5" />
-                        {req}
-                      </li>
-                    ))}
-                  </ul>
+                
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div>
+                    <h4 className="text-lg font-bold text-brand-dark mb-4 flex items-center">
+                      <GraduationCap className="mr-2 h-5 w-5 text-brand-yellow" />
+                      Requirements
+                    </h4>
+                    <ul className="space-y-3">
+                      {selectedJob.requirements.map((req, index) => (
+                        <li key={index} className="flex items-start gap-3 text-gray-600">
+                          <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                          <span className="leading-snug">{req}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold text-brand-dark mb-4 flex items-center">
+                      <Zap className="mr-2 h-5 w-5 text-brand-yellow" />
+                      Responsibilities
+                    </h4>
+                    <ul className="space-y-3">
+                      {selectedJob.responsibilities.map((resp, index) => (
+                        <li key={index} className="flex items-start gap-3 text-gray-600">
+                          <CheckCircle className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
+                          <span className="leading-snug">{resp}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-semibold text-brand-dark mb-2">Responsibilities</h4>
-                  <ul className="space-y-2">
-                    {selectedJob.responsibilities.map((resp, index) => (
-                      <li key={index} className="flex items-start gap-2 text-gray-600">
-                        <CheckCircle className="h-5 w-5 text-brand-yellow flex-shrink-0 mt-0.5" />
-                        {resp}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button className="w-full bg-brand-yellow hover:bg-brand-yellow/90 text-brand-dark">
-                      Apply Now
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Apply for {selectedJob.title}</DialogTitle>
-                      <DialogDescription>Fill out the form below to submit your application</DialogDescription>
-                    </DialogHeader>
-                    {applicationSubmitted ? (
-                      <div className="text-center py-8">
-                        <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-                        <h3 className="text-xl font-semibold text-brand-dark mb-2">Application Submitted!</h3>
-                        <p className="text-gray-600">
-                          Thank you for applying. We'll review your application and get back to you soon.
-                        </p>
-                      </div>
-                    ) : (
-                      <form onSubmit={handleApply} className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium text-brand-dark mb-1">Full Name *</label>
-                          <Input
-                            required
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            placeholder="Your full name"
-                          />
+
+                <div className="pt-6 mt-6 border-t border-gray-100">
+                  {applicationSubmitted ? (
+                    <div className="text-center py-10 bg-green-50 rounded-xl border border-green-100">
+                      <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
+                      <h3 className="text-2xl font-bold text-brand-dark mb-2">Application Received!</h3>
+                      <p className="text-gray-600 max-w-md mx-auto">
+                        Thank you for your interest in joining Return Zero. Our team will review your profile and get back to you soon.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="bg-gray-50 p-6 md:p-8 rounded-xl border border-gray-200">
+                      <h4 className="text-xl font-bold text-brand-dark mb-6">Submit Your Application</h4>
+                      <form onSubmit={handleApply} className="space-y-5">
+                        <div className="grid md:grid-cols-2 gap-5">
+                          <div className="space-y-2">
+                            <label className="text-sm font-semibold text-gray-700">Full Name <span className="text-red-500">*</span></label>
+                            <Input required name="name" value={formData.name} onChange={handleChange} placeholder="John Doe" className="bg-white" />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-semibold text-gray-700">Email Address <span className="text-red-500">*</span></label>
+                            <Input required type="email" name="email" value={formData.email} onChange={handleChange} placeholder="john@example.com" className="bg-white" />
+                          </div>
                         </div>
-                        <div>
-                          <label className="block text-sm font-medium text-brand-dark mb-1">Email *</label>
-                          <Input
-                            required
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            placeholder="your@email.com"
-                          />
+                        
+                        <div className="grid md:grid-cols-2 gap-5">
+                          <div className="space-y-2">
+                            <label className="text-sm font-semibold text-gray-700">WhatsApp / Phone</label>
+                            <Input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+94 7X XXX XXXX" className="bg-white" />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-semibold text-gray-700">Portfolio / GitHub / LinkedIn</label>
+                            <Input type="url" name="portfolio" value={formData.portfolio} onChange={handleChange} placeholder="https://..." className="bg-white" />
+                          </div>
                         </div>
-                        <div>
-                          <label className="block text-sm font-medium text-brand-dark mb-1">Phone</label>
-                          <Input
-                            type="tel"
-                            name="phone"
-                            value={formData.phone}
-                            onChange={handleChange}
-                            placeholder="+94 XX XXX XXXX"
-                          />
+
+                        <div className="space-y-2">
+                          <label className="text-sm font-semibold text-gray-700">Why are you a good fit? <span className="text-red-500">*</span></label>
+                          <Textarea required name="message" value={formData.message} onChange={handleChange} placeholder="Tell us briefly about your experience and why you want to join..." rows={4} className="bg-white resize-none" />
                         </div>
-                        <div>
-                          <label className="block text-sm font-medium text-brand-dark mb-1">
-                            Portfolio / LinkedIn URL
-                          </label>
-                          <Input
-                            type="url"
-                            name="portfolio"
-                            value={formData.portfolio}
-                            onChange={handleChange}
-                            placeholder="https://"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-brand-dark mb-1">
-                            Why do you want to join us? *
-                          </label>
-                          <Textarea
-                            required
-                            name="message"
-                            value={formData.message}
-                            onChange={handleChange}
-                            placeholder="Tell us about yourself and why you'd be a great fit..."
-                            rows={4}
-                          />
-                        </div>
-                        <Button
-                          type="submit"
-                          disabled={isApplying}
-                          className="w-full bg-brand-yellow hover:bg-brand-yellow/90 text-brand-dark"
-                        >
+                        
+                        <Button type="submit" disabled={isApplying} className="w-full bg-brand-yellow hover:bg-brand-yellow/90 text-brand-dark font-bold text-lg py-6 rounded-xl mt-4">
                           {isApplying ? (
                             <>
-                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-brand-dark mr-2" />
-                              Submitting...
+                              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-brand-dark mr-3" />
+                              Sending Application...
                             </>
                           ) : (
                             "Submit Application"
                           )}
                         </Button>
                       </form>
-                    )}
-                  </DialogContent>
-                </Dialog>
+                    </div>
+                  )}
+                </div>
               </div>
             </>
           )}
@@ -485,20 +471,20 @@ export default function CareersPage() {
       </Dialog>
 
       {/* CTA Section */}
-      <section className="py-20 bg-brand-yellow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-brand-dark mb-4">Don't See the Right Role?</h2>
-          <p className="text-xl text-brand-dark/80 mb-8 max-w-2xl mx-auto">
-            We're always looking for talented people. Send us your resume and we'll keep you in mind for future
-            opportunities.
+      <section className="py-24 bg-brand-yellow relative overflow-hidden">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-brand-dark mb-6">Don't See the Right Fit?</h2>
+          <p className="text-xl md:text-2xl text-brand-dark/80 mb-10 font-medium">
+            We are always eager to meet talented developers and designers. Reach out to us directly!
           </p>
           <a
-            href="https://wa.me/94719089368?text=Hi%20I%20am%20interested%20in%20career%20opportunities"
+            href="https://wa.me/94719089368?text=Hi%20Return%20Zero,%20I%20am%20interested%20in%20career%20opportunities%20at%20your%20company."
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Button size="lg" className="bg-brand-dark hover:bg-brand-dark/90 text-white">
-              Get In Touch
+            <Button size="lg" className="bg-brand-dark hover:bg-brand-dark/90 text-white font-bold px-10 py-6 text-lg rounded-full shadow-lg transform hover:-translate-y-1 transition-all">
+              <MessageCircle className="mr-2 h-5 w-5" />
+              Message Us on WhatsApp
             </Button>
           </a>
         </div>
