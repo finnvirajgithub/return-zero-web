@@ -25,15 +25,18 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="overflow-x-hidden">
       <body className={inter.className}>
         
-        <Navbar />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
-        <WhatsAppButton />
+        {/* Website eke main wrap eka - Overflow hadanna dapu kotasa */}
+        <div className="overflow-x-hidden w-full max-w-[100vw]">
+          <Navbar />
+          <main className="min-h-screen">{children}</main>
+          <Footer />
+          <WhatsAppButton />
+        </div>
 
-        {/* Update කරපු Google Analytics ID එක */}
+        {/* Google Analytics ID */}
         <GoogleAnalytics gaId="G-S8Y9B5N5LG" />
         
       </body>
