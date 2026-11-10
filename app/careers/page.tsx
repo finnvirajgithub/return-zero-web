@@ -1,7 +1,8 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState, useMemo } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -11,23 +12,12 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import {
-  Briefcase,
-  MapPin,
-  Clock,
-  DollarSign,
-  Users,
-  Zap,
-  Heart,
-  GraduationCap,
-  ArrowRight,
-  CheckCircle,
-  Code,
-  MessageCircle // <-- මේක තමයි අමතක වෙලා තිබුණේ
+  Briefcase, MapPin, Clock, DollarSign, Users, Zap, Heart, 
+  GraduationCap, ArrowRight, CheckCircle, Code, MessageCircle
 } from "lucide-react"
 import emailjs from "@emailjs/browser"
 
@@ -51,8 +41,7 @@ const jobPositions: JobPosition[] = [
     location: "Remote / Sri Lanka",
     type: "Full-time",
     salary: "Competitive",
-    description:
-      "We're looking for a talented Full Stack Developer to join our growing team. You'll work on exciting projects for travel and hospitality clients, building modern web applications.",
+    description: "We're looking for a talented Full Stack Developer to join our growing team. You'll work on exciting projects for travel and hospitality clients, building modern web applications.",
     requirements: [
       "3+ years of experience with React, Next.js, and Node.js",
       "Strong understanding of TypeScript and modern JavaScript",
@@ -75,8 +64,7 @@ const jobPositions: JobPosition[] = [
     location: "Remote / Sri Lanka",
     type: "Full-time",
     salary: "Competitive",
-    description:
-      "Join our creative team as a UI/UX Designer and help shape beautiful, user-friendly experiences for our travel and hospitality clients.",
+    description: "Join our creative team as a UI/UX Designer and help shape beautiful, user-friendly experiences for our travel and hospitality clients.",
     requirements: [
       "2+ years of experience in UI/UX design",
       "Proficiency in Figma or Adobe XD",
@@ -99,8 +87,7 @@ const jobPositions: JobPosition[] = [
     location: "Remote / Sri Lanka",
     type: "Full-time",
     salary: "Internship",
-    description:
-      "Assist in developing, customizing, and maintaining WordPress websites while gaining practical experience in modern web development practices.",
+    description: "Assist in developing, customizing, and maintaining WordPress websites while gaining practical experience in modern web development practices.",
     requirements: [
       "Basic knowledge of WordPress",
       "Familiarity with HTML and CSS",
@@ -123,8 +110,7 @@ const jobPositions: JobPosition[] = [
     location: "Remote / Sri Lanka",
     type: "Full-time",
     salary: "Internship",
-    description:
-      "Support development of interactive user interfaces using React.js while learning modern frontend development techniques and industry best practices.",
+    description: "Support development of interactive user interfaces using React.js while learning modern frontend development techniques and industry best practices.",
     requirements: [
       "Basic knowledge of React.js",
       "Understanding of JavaScript fundamentals",
@@ -143,40 +129,26 @@ const jobPositions: JobPosition[] = [
 ]
 
 const benefits = [
-  {
-    icon: <Clock className="h-6 w-6" />,
-    title: "Flexible Hours",
-    description: "Work when you're most productive with our flexible schedule",
-  },
-  {
-    icon: <MapPin className="h-6 w-6" />,
-    title: "Remote Work",
-    description: "Work from anywhere - home, cafe, or our office in Sri Lanka",
-  },
-  {
-    icon: <GraduationCap className="h-6 w-6" />,
-    title: "Learning & Growth",
-    description: "Continuous learning opportunities and career development",
-  },
-  {
-    icon: <Users className="h-6 w-6" />,
-    title: "Great Team",
-    description: "Work with talented, friendly people who support each other",
-  },
-  {
-    icon: <Heart className="h-6 w-6" />,
-    title: "Work-Life Balance",
-    description: "We value your personal time and well-being",
-  },
-  {
-    icon: <Zap className="h-6 w-6" />,
-    title: "Exciting Projects",
-    description: "Work on diverse projects for travel and hospitality industries",
-  },
+  { icon: <Clock className="h-6 w-6" />, title: "Flexible Hours", description: "Work when you're most productive with our flexible schedule" },
+  { icon: <MapPin className="h-6 w-6" />, title: "Remote Work", description: "Work from anywhere - home, cafe, or our office in Sri Lanka" },
+  { icon: <GraduationCap className="h-6 w-6" />, title: "Learning & Growth", description: "Continuous learning opportunities and career development" },
+  { icon: <Users className="h-6 w-6" />, title: "Great Team", description: "Work with talented, friendly people who support each other" },
+  { icon: <Heart className="h-6 w-6" />, title: "Work-Life Balance", description: "We value your personal time and well-being" },
+  { icon: <Zap className="h-6 w-6" />, title: "Exciting Projects", description: "Work on diverse projects for travel and hospitality industries" },
 ]
 
+// --- Animation Variants ---
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+}
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+}
+
 export default function CareersPage() {
-  const [isVisible, setIsVisible] = useState(false)
   const [selectedJob, setSelectedJob] = useState<JobPosition | null>(null)
   const [isApplying, setIsApplying] = useState(false)
   const [applicationSubmitted, setApplicationSubmitted] = useState(false)
@@ -188,15 +160,8 @@ export default function CareersPage() {
     message: "",
   })
 
-  useEffect(() => {
-    setIsVisible(true)
-  }, [])
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    })
+    setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
   const handleApply = async (e: React.FormEvent) => {
@@ -215,18 +180,9 @@ export default function CareersPage() {
     }
 
     try {
-      const result = await emailjs.send("service_4np4c87", "template_sdvo4wb", templateParams, "-slcF47WslD-a1KcO")
-
-      console.log(result.text)
+      await emailjs.send("service_4np4c87", "template_sdvo4wb", templateParams, "-slcF47WslD-a1KcO")
       setApplicationSubmitted(true)
-      // Reset form
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        portfolio: "",
-        message: "",
-      })
+      setFormData({ name: "", email: "", phone: "", portfolio: "", message: "" })
     } catch (error) {
       console.error(error)
       alert("Something went wrong. Please try again or contact us via WhatsApp.")
@@ -235,174 +191,206 @@ export default function CareersPage() {
     setIsApplying(false)
   }
 
-  const handleDialogClose = () => {
-    setSelectedJob(null)
-    setApplicationSubmitted(false)
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      portfolio: "",
-      message: "",
-    })
+  const handleDialogClose = (isOpen: boolean) => {
+    if (!isOpen) {
+      setSelectedJob(null)
+      setApplicationSubmitted(false)
+      setFormData({ name: "", email: "", phone: "", portfolio: "", message: "" })
+    }
   }
 
+  // --- Live Background Particles ---
+  const memoizedParticles = useMemo(() => {
+    return [...Array(15)].map((_, i) => {
+      const size = Math.random() * 10 + 5
+      return (
+        <motion.div
+          key={i}
+          className="absolute rounded-full bg-brand-yellow/30 blur-[2px]"
+          style={{ width: size, height: size, left: `${Math.random() * 100}%`, bottom: "-20%" }}
+          animate={{
+            y: ["0vh", "-120vh"],
+            x: Math.random() > 0.5 ? [0, 50, -50, 0] : [0, -50, 50, 0],
+            opacity: [0, 0.8, 0.8, 0],
+          }}
+          transition={{ duration: Math.random() * 15 + 15, repeat: Infinity, ease: "linear", delay: Math.random() * 10 }}
+        />
+      )
+    })
+  }, [])
+
   return (
-    <div className="pt-16 min-h-screen bg-gray-50">
+    <div className="bg-slate-950 text-slate-50 min-h-screen pt-20 pb-20 selection:bg-brand-yellow selection:text-slate-950 overflow-hidden">
+      
+      {/* Global Background */}
+      <div className="fixed inset-0 z-0 bg-[url('/images/grid.svg')] bg-center [mask-image:linear-gradient(180deg,rgba(255,255,255,0.1),rgba(255,255,255,0))] opacity-20 pointer-events-none"></div>
+
       {/* Hero Section */}
-      <section className="relative py-24 md:py-32 bg-brand-dark text-white overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]"></div>
+      <section className="relative py-24 md:py-32 z-10 border-b border-white/5 bg-slate-900/40 backdrop-blur-xl">
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">{memoizedParticles}</div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-brand-yellow/10 rounded-full blur-[150px] pointer-events-none"></div>
         
-        <div className={`relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center transition-all duration-1000 ${isVisible ? "animate-fade-in translate-y-0" : "opacity-0 translate-y-10"}`}>
-          <Badge className="mb-6 bg-brand-yellow/20 text-brand-yellow border-brand-yellow px-4 py-1 text-sm font-bold uppercase tracking-wider">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}
+          className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
+        >
+          <Badge className="mb-6 bg-white/5 text-brand-yellow border border-brand-yellow/30 px-5 py-2 text-sm font-bold tracking-widest uppercase rounded-full backdrop-blur-md">
             Careers at Return Zero
           </Badge>
-          <h1 className="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight">
-            Build Your Future With <span className="text-brand-yellow">Us</span>
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 tracking-tight">
+            Build Your Future <br className="hidden md:block"/> With <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-yellow to-yellow-300">Us</span>
           </h1>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed mb-10">
+          <p className="text-xl md:text-2xl text-slate-400 max-w-3xl mx-auto font-light leading-relaxed mb-10">
             Join a forward-thinking team engineering the next generation of software and travel tech solutions. We're looking for passionate individuals ready to make an impact.
           </p>
-          <a href="#positions">
-            <Button size="lg" className="bg-brand-yellow hover:bg-brand-yellow/90 text-brand-dark font-bold rounded-full px-8 shadow-lg transform hover:-translate-y-1 transition-all">
-              <Code className="mr-2 h-5 w-5" />
-              View Open Positions
-            </Button>
-          </a>
-        </div>
+          <div className="flex justify-center">
+            <a href="#positions">
+              <Button size="lg" className="bg-brand-yellow hover:bg-yellow-400 text-slate-950 font-bold rounded-full px-8 shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:scale-105 transition-all">
+                <Code className="mr-2 h-5 w-5" /> View Open Positions
+              </Button>
+            </a>
+          </div>
+        </motion.div>
       </section>
 
       {/* Why Join Us Section */}
-      <section className="py-24 bg-white border-b border-gray-100">
+      <section className="py-24 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold text-brand-dark mb-4">Life at Return Zero</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              We offer more than just a job — we provide an environment where you can learn, grow, and thrive.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <motion.div 
+            initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}
+            className="text-center mb-16"
+          >
+            <motion.h2 variants={fadeInUp} className="text-3xl md:text-5xl font-bold text-white mb-4">Life at Return Zero</motion.h2>
+            <motion.p variants={fadeInUp} className="text-xl text-slate-400 max-w-2xl mx-auto">We offer more than just a job — we provide an environment where you can learn, grow, and thrive.</motion.p>
+          </motion.div>
+          <motion.div 
+            initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
             {benefits.map((benefit, index) => (
-              <Card key={index} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-gray-100 bg-gray-50">
-                <CardHeader>
-                  <div className="p-4 bg-white rounded-2xl text-brand-yellow w-fit shadow-sm group-hover:scale-110 group-hover:bg-brand-yellow group-hover:text-white transition-all duration-300">
-                    {benefit.icon}
-                  </div>
-                  <CardTitle className="text-xl mt-4 font-bold text-brand-dark">{benefit.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-base text-gray-600">{benefit.description}</CardDescription>
-                </CardContent>
-              </Card>
+              <motion.div key={index} variants={fadeInUp} className="h-full">
+                <Card className="group h-full flex flex-col bg-white/5 backdrop-blur-md border-white/10 hover:border-brand-yellow/50 transition-all duration-300 hover:-translate-y-2 overflow-hidden relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-brand-yellow/0 via-transparent to-brand-yellow/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                  <CardHeader>
+                    <div className="p-4 bg-slate-900 border border-white/5 rounded-2xl text-brand-yellow w-fit shadow-inner group-hover:scale-110 group-hover:bg-brand-yellow group-hover:text-slate-950 transition-all duration-300">
+                      {benefit.icon}
+                    </div>
+                    <CardTitle className="text-xl mt-4 font-bold text-white group-hover:text-brand-yellow transition-colors">{benefit.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex-grow">
+                    <CardDescription className="text-base text-slate-400 leading-relaxed">{benefit.description}</CardDescription>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Open Positions Section */}
-      <section id="positions" className="py-24 bg-gray-50">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold text-brand-dark mb-4">Open Roles</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Find your perfect fit and start your engineering journey.
-            </p>
-          </div>
+      <section id="positions" className="py-24 bg-slate-900 border-y border-white/5 relative overflow-hidden z-10">
+        <div className="absolute right-0 top-1/2 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[150px] -translate-y-1/2 pointer-events-none"></div>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div 
+            initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}
+            className="text-center mb-16"
+          >
+            <motion.h2 variants={fadeInUp} className="text-3xl md:text-5xl font-bold text-white mb-4">Open Roles</motion.h2>
+            <motion.p variants={fadeInUp} className="text-xl text-slate-400 max-w-2xl mx-auto">Find your perfect fit and start your engineering journey.</motion.p>
+          </motion.div>
           
-          <div className="space-y-6">
+          <motion.div 
+            initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}
+            className="space-y-6"
+          >
             {jobPositions.map((job) => (
-              <Card
-                key={job.id}
-                className="group hover:shadow-xl transition-all duration-300 border-gray-200 bg-white cursor-pointer hover:-translate-y-1"
-                onClick={() => setSelectedJob(job)}
-              >
-                <CardContent className="p-8">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="p-2 bg-brand-yellow/10 rounded-lg">
-                          <Briefcase className="h-6 w-6 text-brand-yellow" />
+              <motion.div key={job.id} variants={fadeInUp}>
+                <Card
+                  className="group transition-all duration-300 border-white/10 bg-white/5 hover:bg-white/10 hover:border-brand-yellow/50 backdrop-blur-md cursor-pointer hover:-translate-y-1"
+                  onClick={() => setSelectedJob(job)}
+                >
+                  <CardContent className="p-8">
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="p-3 bg-slate-950 border border-white/10 rounded-xl">
+                            <Briefcase className="h-5 w-5 text-brand-yellow" />
+                          </div>
+                          <h3 className="text-2xl font-bold text-white group-hover:text-brand-yellow transition-colors">{job.title}</h3>
                         </div>
-                        <h3 className="text-2xl font-bold text-brand-dark group-hover:text-brand-yellow transition-colors">{job.title}</h3>
+                        <p className="text-slate-400 mb-6 text-base leading-relaxed line-clamp-2 pr-4">{job.description}</p>
+                        <div className="flex flex-wrap gap-3">
+                          <Badge variant="secondary" className="bg-slate-950 text-slate-300 border border-white/10 px-3 py-1.5 flex items-center gap-1.5">
+                            <Users className="h-3.5 w-3.5 text-brand-yellow" /> {job.department}
+                          </Badge>
+                          <Badge variant="secondary" className="bg-slate-950 text-slate-300 border border-white/10 px-3 py-1.5 flex items-center gap-1.5">
+                            <MapPin className="h-3.5 w-3.5 text-brand-yellow" /> {job.location}
+                          </Badge>
+                          <Badge variant="secondary" className="bg-slate-950 text-slate-300 border border-white/10 px-3 py-1.5 flex items-center gap-1.5">
+                            <Clock className="h-3.5 w-3.5 text-brand-yellow" /> {job.type}
+                          </Badge>
+                          <Badge variant="secondary" className="bg-brand-yellow/10 text-brand-yellow border border-brand-yellow/20 px-3 py-1.5 flex items-center gap-1.5 font-semibold">
+                            <DollarSign className="h-3.5 w-3.5" /> {job.salary}
+                          </Badge>
+                        </div>
                       </div>
-                      <p className="text-gray-600 mb-5 text-base leading-relaxed line-clamp-2 pr-4">{job.description}</p>
-                      <div className="flex flex-wrap gap-2">
-                        <Badge variant="secondary" className="bg-gray-100 text-gray-700 px-3 py-1 flex items-center gap-1.5">
-                          <Users className="h-3.5 w-3.5" />
-                          {job.department}
-                        </Badge>
-                        <Badge variant="secondary" className="bg-gray-100 text-gray-700 px-3 py-1 flex items-center gap-1.5">
-                          <MapPin className="h-3.5 w-3.5" />
-                          {job.location}
-                        </Badge>
-                        <Badge variant="secondary" className="bg-gray-100 text-gray-700 px-3 py-1 flex items-center gap-1.5">
-                          <Clock className="h-3.5 w-3.5" />
-                          {job.type}
-                        </Badge>
-                        <Badge variant="secondary" className="bg-green-100 text-green-700 px-3 py-1 flex items-center gap-1.5 font-semibold">
-                          <DollarSign className="h-3.5 w-3.5" />
-                          {job.salary}
-                        </Badge>
+                      <div className="mt-4 md:mt-0">
+                        <Button className="w-full md:w-auto bg-brand-yellow text-slate-950 hover:bg-yellow-400 font-bold transition-all rounded-full px-8 py-6">
+                          View Role <ArrowRight className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
+                        </Button>
                       </div>
                     </div>
-                    <div className="mt-4 md:mt-0">
-                      <Button className="w-full md:w-auto bg-brand-dark text-white group-hover:bg-brand-yellow group-hover:text-brand-dark transition-all rounded-full px-6">
-                        View Role
-                        <ArrowRight className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Job Detail Dialog (Popup) */}
+      {/* Dark Theme Job Detail Dialog (Popup) */}
       <Dialog open={!!selectedJob} onOpenChange={handleDialogClose}>
-        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto p-0 bg-white rounded-2xl">
+        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto p-0 bg-slate-900 border border-white/10 rounded-2xl text-slate-50 shadow-2xl">
           {selectedJob && (
             <>
-              <DialogHeader className="p-8 pb-0 bg-gray-50 border-b border-gray-100 rounded-t-2xl">
-                <DialogTitle className="text-3xl font-bold text-brand-dark mb-4">{selectedJob.title}</DialogTitle>
-                <DialogDescription className="flex flex-wrap gap-2 pb-6">
-                  <Badge variant="outline" className="border-gray-300 text-gray-600 bg-white">{selectedJob.department}</Badge>
-                  <Badge variant="outline" className="border-gray-300 text-gray-600 bg-white">{selectedJob.location}</Badge>
-                  <Badge variant="outline" className="border-gray-300 text-gray-600 bg-white">{selectedJob.type}</Badge>
+              <DialogHeader className="p-8 pb-0 border-b border-white/5 rounded-t-2xl relative bg-slate-950/50">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-brand-yellow/10 rounded-full blur-[50px]"></div>
+                <DialogTitle className="text-3xl font-bold text-white mb-4 relative z-10">{selectedJob.title}</DialogTitle>
+                <DialogDescription className="flex flex-wrap gap-2 pb-6 relative z-10">
+                  <Badge variant="outline" className="border-white/10 text-slate-300 bg-white/5">{selectedJob.department}</Badge>
+                  <Badge variant="outline" className="border-white/10 text-slate-300 bg-white/5">{selectedJob.location}</Badge>
+                  <Badge variant="outline" className="border-white/10 text-brand-yellow bg-brand-yellow/10 border-brand-yellow/20">{selectedJob.type}</Badge>
                 </DialogDescription>
               </DialogHeader>
               
-              <div className="p-8 space-y-8">
+              <div className="p-8 space-y-8 bg-slate-900">
                 <div>
-                  <h4 className="text-xl font-bold text-brand-dark mb-3 border-b border-gray-100 pb-2">Role Overview</h4>
-                  <p className="text-gray-600 leading-relaxed text-lg">{selectedJob.description}</p>
+                  <h4 className="text-xl font-bold text-white mb-3 border-b border-white/5 pb-2">Role Overview</h4>
+                  <p className="text-slate-400 leading-relaxed text-lg">{selectedJob.description}</p>
                 </div>
                 
                 <div className="grid md:grid-cols-2 gap-8">
                   <div>
-                    <h4 className="text-lg font-bold text-brand-dark mb-4 flex items-center">
-                      <GraduationCap className="mr-2 h-5 w-5 text-brand-yellow" />
-                      Requirements
+                    <h4 className="text-lg font-bold text-white mb-4 flex items-center">
+                      <GraduationCap className="mr-2 h-5 w-5 text-brand-yellow" /> Requirements
                     </h4>
                     <ul className="space-y-3">
                       {selectedJob.requirements.map((req, index) => (
-                        <li key={index} className="flex items-start gap-3 text-gray-600">
-                          <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                        <li key={index} className="flex items-start gap-3 text-slate-400">
+                          <CheckCircle className="h-5 w-5 text-brand-yellow flex-shrink-0 mt-0.5" />
                           <span className="leading-snug">{req}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
                   <div>
-                    <h4 className="text-lg font-bold text-brand-dark mb-4 flex items-center">
-                      <Zap className="mr-2 h-5 w-5 text-brand-yellow" />
-                      Responsibilities
+                    <h4 className="text-lg font-bold text-white mb-4 flex items-center">
+                      <Zap className="mr-2 h-5 w-5 text-brand-yellow" /> Responsibilities
                     </h4>
                     <ul className="space-y-3">
                       {selectedJob.responsibilities.map((resp, index) => (
-                        <li key={index} className="flex items-start gap-3 text-gray-600">
-                          <CheckCircle className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
+                        <li key={index} className="flex items-start gap-3 text-slate-400">
+                          <CheckCircle className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
                           <span className="leading-snug">{resp}</span>
                         </li>
                       ))}
@@ -410,52 +398,49 @@ export default function CareersPage() {
                   </div>
                 </div>
 
-                <div className="pt-6 mt-6 border-t border-gray-100">
+                <div className="pt-6 mt-6 border-t border-white/5">
                   {applicationSubmitted ? (
-                    <div className="text-center py-10 bg-green-50 rounded-xl border border-green-100">
-                      <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-                      <h3 className="text-2xl font-bold text-brand-dark mb-2">Application Received!</h3>
-                      <p className="text-gray-600 max-w-md mx-auto">
-                        Thank you for your interest in joining Return Zero. Our team will review your profile and get back to you soon.
-                      </p>
-                    </div>
+                    <AnimatePresence>
+                      <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10 bg-brand-yellow/10 rounded-2xl border border-brand-yellow/20">
+                        <CheckCircle className="h-16 w-16 text-brand-yellow mx-auto mb-4" />
+                        <h3 className="text-2xl font-bold text-white mb-2">Application Received!</h3>
+                        <p className="text-slate-300 max-w-md mx-auto">Thank you for your interest in joining Return Zero. Our team will review your profile and get back to you soon.</p>
+                      </motion.div>
+                    </AnimatePresence>
                   ) : (
-                    <div className="bg-gray-50 p-6 md:p-8 rounded-xl border border-gray-200">
-                      <h4 className="text-xl font-bold text-brand-dark mb-6">Submit Your Application</h4>
+                    <div className="bg-slate-950/50 p-6 md:p-8 rounded-2xl border border-white/5">
+                      <h4 className="text-xl font-bold text-white mb-6">Submit Your Application</h4>
                       <form onSubmit={handleApply} className="space-y-5">
                         <div className="grid md:grid-cols-2 gap-5">
                           <div className="space-y-2">
-                            <label className="text-sm font-semibold text-gray-700">Full Name <span className="text-red-500">*</span></label>
-                            <Input required name="name" value={formData.name} onChange={handleChange} placeholder="John Doe" className="bg-white" />
+                            <label className="text-sm font-semibold text-slate-300">Full Name <span className="text-brand-yellow">*</span></label>
+                            <Input required name="name" value={formData.name} onChange={handleChange} placeholder="John Doe" className="bg-slate-900 border-white/10 text-white focus-visible:ring-brand-yellow" />
                           </div>
                           <div className="space-y-2">
-                            <label className="text-sm font-semibold text-gray-700">Email Address <span className="text-red-500">*</span></label>
-                            <Input required type="email" name="email" value={formData.email} onChange={handleChange} placeholder="john@example.com" className="bg-white" />
+                            <label className="text-sm font-semibold text-slate-300">Email Address <span className="text-brand-yellow">*</span></label>
+                            <Input required type="email" name="email" value={formData.email} onChange={handleChange} placeholder="john@example.com" className="bg-slate-900 border-white/10 text-white focus-visible:ring-brand-yellow" />
                           </div>
                         </div>
                         
                         <div className="grid md:grid-cols-2 gap-5">
                           <div className="space-y-2">
-                            <label className="text-sm font-semibold text-gray-700">WhatsApp / Phone</label>
-                            <Input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+94 7X XXX XXXX" className="bg-white" />
+                            <label className="text-sm font-semibold text-slate-300">WhatsApp / Phone</label>
+                            <Input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+94 7X XXX XXXX" className="bg-slate-900 border-white/10 text-white focus-visible:ring-brand-yellow" />
                           </div>
                           <div className="space-y-2">
-                            <label className="text-sm font-semibold text-gray-700">Portfolio / GitHub / LinkedIn</label>
-                            <Input type="url" name="portfolio" value={formData.portfolio} onChange={handleChange} placeholder="https://..." className="bg-white" />
+                            <label className="text-sm font-semibold text-slate-300">Portfolio / LinkedIn</label>
+                            <Input type="url" name="portfolio" value={formData.portfolio} onChange={handleChange} placeholder="https://..." className="bg-slate-900 border-white/10 text-white focus-visible:ring-brand-yellow" />
                           </div>
                         </div>
 
                         <div className="space-y-2">
-                          <label className="text-sm font-semibold text-gray-700">Why are you a good fit? <span className="text-red-500">*</span></label>
-                          <Textarea required name="message" value={formData.message} onChange={handleChange} placeholder="Tell us briefly about your experience and why you want to join..." rows={4} className="bg-white resize-none" />
+                          <label className="text-sm font-semibold text-slate-300">Why are you a good fit? <span className="text-brand-yellow">*</span></label>
+                          <Textarea required name="message" value={formData.message} onChange={handleChange} placeholder="Tell us briefly about your experience..." rows={4} className="bg-slate-900 border-white/10 text-white focus-visible:ring-brand-yellow resize-none" />
                         </div>
                         
-                        <Button type="submit" disabled={isApplying} className="w-full bg-brand-yellow hover:bg-brand-yellow/90 text-brand-dark font-bold text-lg py-6 rounded-xl mt-4">
+                        <Button type="submit" disabled={isApplying} className="w-full bg-brand-yellow hover:bg-yellow-400 text-slate-950 font-bold text-lg py-6 rounded-xl mt-4">
                           {isApplying ? (
-                            <>
-                              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-brand-dark mr-3" />
-                              Sending Application...
-                            </>
+                            <><div className="animate-spin rounded-full h-5 w-5 border-b-2 border-slate-950 mr-3" /> Sending Application...</>
                           ) : (
                             "Submit Application"
                           )}
@@ -470,21 +455,19 @@ export default function CareersPage() {
         </DialogContent>
       </Dialog>
 
-      {/* CTA Section */}
-      <section className="py-24 bg-brand-yellow relative overflow-hidden">
+      {/* Final CTA Section */}
+      <section className="py-24 relative overflow-hidden z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-brand-yellow/20 to-transparent"></div>
+        <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-20"></div>
+        
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-brand-dark mb-6">Don't See the Right Fit?</h2>
-          <p className="text-xl md:text-2xl text-brand-dark/80 mb-10 font-medium">
+          <h2 className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight">Don't See the Right Fit?</h2>
+          <p className="text-xl md:text-2xl text-slate-300 mb-10 font-light">
             We are always eager to meet talented developers and designers. Reach out to us directly!
           </p>
-          <a
-            href="https://wa.me/94719089368?text=Hi%20Return%20Zero,%20I%20am%20interested%20in%20career%20opportunities%20at%20your%20company."
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button size="lg" className="bg-brand-dark hover:bg-brand-dark/90 text-white font-bold px-10 py-6 text-lg rounded-full shadow-lg transform hover:-translate-y-1 transition-all">
-              <MessageCircle className="mr-2 h-5 w-5" />
-              Message Us on WhatsApp
+          <a href="https://wa.me/94719089368?text=Hi%20Return%20Zero,%20I%20am%20interested%20in%20career%20opportunities%20at%20your%20company." target="_blank" rel="noopener noreferrer">
+            <Button size="lg" className="bg-brand-yellow hover:bg-yellow-400 text-slate-950 font-bold px-10 py-7 text-xl rounded-full shadow-[0_0_30px_rgba(245,158,11,0.3)] transform hover:scale-105 transition-all">
+              <MessageCircle className="mr-3 h-6 w-6" /> Message Us on WhatsApp
             </Button>
           </a>
         </div>
