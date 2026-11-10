@@ -67,7 +67,7 @@ export default function Navbar() {
                 <Image src="/images/logo.jpg" alt="Return Zero Solutions" width={scrolled ? 28 : 32} height={scrolled ? 28 : 32} className="object-cover rounded-lg transition-all" />
               </div>
               <span className={`font-black tracking-tight text-white transition-all duration-300 ${scrolled ? "text-lg" : "text-xl"}`}>
-                Return <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-yellow to-yellow-300">Zero</span>
+                Return <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-yellow to-yellow-300">Zero ;</span>
               </span>
             </Link>
 

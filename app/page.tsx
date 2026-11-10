@@ -2,11 +2,12 @@
 
 import { useEffect, useState, useMemo } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Code, Globe, TrendingUp, ArrowRight, CheckCircle, Star, ChevronDown, MapPin, Hotel, LayoutTemplate } from "lucide-react"
+import { Code, Globe, TrendingUp, ArrowRight, Star, ChevronDown, MapPin, Hotel, LayoutTemplate } from "lucide-react"
 
 // --- CONSTANTS (Data) ---
 const rotatingServices = [
@@ -39,18 +40,36 @@ const servicesData = [
   },
 ]
 
+// Tech stack now supports actual image logos or fallback icons
 const techStack = [
-  { name: "Next.js", icon: <LayoutTemplate className="h-8 w-8" /> },
-  { name: "React", icon: <Code className="h-8 w-8" /> },
-  { name: "Node.js", icon: <Globe className="h-8 w-8" /> },
-  { name: "AWS", icon: <TrendingUp className="h-8 w-8" /> },
-  { name: "Tailwind CSS", icon: <LayoutTemplate className="h-8 w-8" /> },
-  { name: "MongoDB", icon: <Code className="h-8 w-8" /> },
+  { name: "Next.js", icon: <LayoutTemplate className="h-8 w-8" />, image: null }, 
+  { name: "React", icon: <Code className="h-8 w-8" />, image: null },
+  { name: "Node.js", icon: <Globe className="h-8 w-8" />, image: null },
+  { name: "AWS", icon: <TrendingUp className="h-8 w-8" />, image: null },
+  { name: "Tailwind CSS", icon: <LayoutTemplate className="h-8 w-8" />, image: null },
+  { name: "MongoDB", icon: <Code className="h-8 w-8" />, image: null },
+  { name: "Wordpress", icon: <LayoutTemplate className="h-8 w-8" />, image: null }
 ]
 
-const clients = [
-  "Ceylon Best Travels", "The Islanders", "Crown Tours Sri Lanka", 
-  "Kumaru Lanka Tours", "Gaveesha Tour Kandy", "Sachi Mountain Villa"
+// Clients list with mixed logos and text
+const clientsList = [
+  { name: "Lanka Go Tours", logo: "/companylogos/lankagologo.webp" },
+  { name: "Best Guide Lanka", logo: "/companylogos/bestguidelankalogo.png" },
+  { name: "Ceylon Best Travels", logo: "/companylogos/ceylonbestlogo.webp" },
+  { name: "The Islanders", logo: "/companylogos/theislanderslogo.png" },
+  { name: "Lesley Tuk Tuk Safari", logo: "/companylogos/lesleytuktuklogo.png" },
+  { name: "Habarana Jeep Safari", logo: "/companylogos/Habaranajeeplogo.png" },
+  { name: "Titan Tours", logo: "/companylogos/titantouslogo.png" },
+  { name: "Wicky Tours Kandy", logo: "/companylogos/wickytourslogo.png" },
+  { name: "Lux Tour Kandy", logo: "/companylogos/luxtourslogo.png" },
+  { name: "Lesley Lanka Horizon Tours", logo: "/companylogos/lesleylankalogo.png" },
+  { name: "Kumaru Lanka Tours", logo: null },
+  { name: "Gaveesha Tour Kandy", logo: null },
+  { name: "Sachi Mountain Villa", logo: null },
+  { name: "Habarana Lodge", logo: null },
+  { name: "Anuradhapura Tour Guide Chamal", logo: null },
+  { name: "Hill Kandyan Lodge", logo: null },
+  { name: "Elegent Mist Villa", logo: null }
 ]
 
 const testimonials = [
@@ -66,10 +85,10 @@ const col1 = [...testimonials.slice(0, 3), ...testimonials.slice(0, 3)]
 const col2 = [...testimonials.slice(3, 6), ...testimonials.slice(3, 6)]
 
 export default function HomePage() {
-  // 1. Typewriter Animation State
   const [currentServiceIndex, setCurrentServiceIndex] = useState(0)
   const [displayText, setDisplayText] = useState("")
   const [isDeleting, setIsDeleting] = useState(false)
+  const [activeTab, setActiveTab] = useState(0)
 
   // Typewriter Effect Logic
   useEffect(() => {
@@ -97,21 +116,51 @@ export default function HomePage() {
     return () => clearTimeout(timeout)
   }, [displayText, isDeleting, currentServiceIndex])
 
-  // 2. Interactive Services State
-  const [activeTab, setActiveTab] = useState(0)
-
-  // 3. Memoized Triangles (Meken triangles flicker wena eka nathi wenawa)
-  const memoizedTriangles = useMemo(() => {
-    return [...Array(15)].map((_, i) => {
-      const size = Math.random() * 20 + 10
+  // 1. Geometric Scattered Background (Whole Page)
+  const geometricBackground = useMemo(() => {
+    return [...Array(25)].map((_, i) => {
+      const size = Math.random() * 60 + 30 
+      const opacityBase = Math.random() * 0.15 + 0.05
       return (
         <motion.div
-          key={i}
+          key={`geo-${i}`}
+          className="absolute"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            width: size,
+            height: size,
+            rotate: `${Math.random() * 360}deg`,
+          }}
+          animate={{ opacity: [opacityBase, opacityBase + 0.2, opacityBase] }}
+          transition={{
+            duration: Math.random() * 3 + 3,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: Math.random() * 2,
+          }}
+        >
+          <svg viewBox="0 0 100 100" className="w-full h-full" preserveAspectRatio="none">
+            <polygon points="0,0 100,0 0,100" fill="#F59E0B" />
+            <polygon points="0,40 60,100 0,100" fill="#FEF3C7" fillOpacity="0.3" />
+          </svg>
+        </motion.div>
+      )
+    })
+  }, [])
+
+  // 2. Small Floating Particles
+  const memoizedTriangles = useMemo(() => {
+    return [...Array(40)].map((_, i) => {
+      const size = Math.random() * 10 + 5
+      return (
+        <motion.div
+          key={`float-${i}`}
           className="absolute"
           style={{
             borderLeft: `${size}px solid transparent`,
             borderRight: `${size}px solid transparent`,
-            borderBottom: `${size * 1.7}px solid rgba(245, 158, 11, 0.15)`,
+            borderBottom: `${size * 1.7}px solid rgba(245, 158, 11, 0.2)`,
             left: `${Math.random() * 100}%`,
             bottom: "-10%",
           }}
@@ -132,46 +181,56 @@ export default function HomePage() {
   }, [])
 
   return (
-    <div className="bg-slate-950 text-slate-50 overflow-hidden selection:bg-brand-yellow selection:text-slate-950">
+    <div className="bg-slate-950 text-slate-50 overflow-hidden selection:bg-brand-yellow selection:text-slate-950 relative">
+      
+      {/* GLOBAL FIXED BACKGROUND (Covers the whole page) */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        {geometricBackground}
+        {memoizedTriangles}
+        <div className="absolute inset-0 bg-[url('/images/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-10"></div>
+      </div>
       
       {/* 1. HERO SECTION */}
-      <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
-        {/* Live Animated Background */}
-        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-          {memoizedTriangles}
-        </div>
-        
+      <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden z-10">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-yellow/10 rounded-full blur-[128px] -z-10 animate-pulse"></div>
-        <div className="absolute inset-0 z-0 bg-[url('/images/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-20"></div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mt-10">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <Badge className="mb-6 bg-white/5 text-brand-yellow border border-brand-yellow/30 px-5 py-2 text-sm backdrop-blur-md rounded-full">
-              ✨ Premier IT & Travel Tech Partner
+            <Badge className="mb-6 bg-slate-900/80 text-brand-yellow border border-brand-yellow/30 px-5 py-2 text-sm backdrop-blur-md rounded-full shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+               Premier IT & Travel Tech Partner
             </Badge>
           </motion.div>
           
           <motion.h1 
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-5xl md:text-8xl font-black text-white mb-6 tracking-tight leading-tight"
+            className="text-5xl md:text-8xl font-black text-white mb-2 tracking-tight leading-tight"
           >
-            Return Zero <br className="hidden md:block"/>
+            Return Zero; <br className="hidden md:block"/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-yellow to-yellow-300">
               Solutions
             </span>
           </motion.h1>
 
-          {/* FIXED: Typewriter Text Animation with Fixed Width */}
-          <div className="h-16 md:h-20 mb-8 flex justify-center items-center w-full max-w-4xl mx-auto">
-            <span className="text-xl md:text-3xl text-slate-400 font-light mr-3 hidden sm:block whitespace-nowrap">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
+            className="mb-10"
+          >
+            <h2 className="text-lg md:text-2xl font-light tracking-[0.25em] text-slate-300 uppercase">
+              - Your Vision, <span className="font-semibold text-brand-yellow">Perfected -</span>
+            </h2>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.4 }}
+            className="min-h-[4rem] md:h-20 mb-8 flex flex-col sm:flex-row justify-center items-center w-full max-w-4xl mx-auto gap-3"
+          >
+            <span className="text-lg sm:text-xl md:text-3xl text-slate-400 font-light whitespace-nowrap">
               We specialize in
             </span>
             <div className="text-lg md:text-2xl font-bold bg-white/10 px-4 py-3 rounded-lg backdrop-blur-sm flex items-center justify-start border border-white/5 shadow-inner w-[280px] md:w-[420px] overflow-hidden">
-              {/* Typewriter Text (Yellow + Mono Font) */}
               <span className="text-brand-yellow font-mono tracking-tight whitespace-nowrap">
                 {displayText}
               </span>
-              {/* Blinking Cursor */}
               <motion.span 
                 animate={{ opacity: [1, 0] }} 
                 transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
@@ -180,11 +239,11 @@ export default function HomePage() {
                 |
               </motion.span>
             </div>
-          </div>
+          </motion.div>
 
           <motion.div 
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-4"
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-6"
           >
             <Link href="/contact" className="w-full sm:w-auto">
               <Button size="lg" className="w-full sm:w-auto bg-brand-yellow hover:bg-yellow-400 text-slate-950 font-bold px-8 py-6 rounded-full shadow-[0_0_40px_rgba(245,158,11,0.3)] transform hover:scale-105 transition-all">
@@ -196,27 +255,44 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 2. CLIENTS LOGO BANNER */}
-      <section className="py-8 border-y border-white/5 bg-white/5 backdrop-blur-sm overflow-hidden flex flex-col items-center">
+      {/* 2. CLIENTS LOGO BANNER (Showing BOTH Logo and Text together) */}
+      <section className="py-8 border-y border-white/5 bg-slate-900/60 overflow-hidden flex flex-col items-center relative z-10">
         <p className="text-slate-400 text-sm font-semibold uppercase tracking-widest mb-6">Trusted by 50+ Sri Lankan Travel Brands</p>
-        <motion.div 
-          className="flex whitespace-nowrap gap-16 px-8 items-center"
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{ repeat: Infinity, ease: "linear", duration: 30 }}
-        >
-          {clients.concat(clients).map((client, i) => (
-            <div key={i} className="text-xl font-bold text-slate-500 flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center">
-                <Star className="h-4 w-4 text-slate-600" />
+        <div className="flex overflow-hidden w-full">
+          <motion.div 
+            className="flex whitespace-nowrap gap-12 px-8 items-center"
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ repeat: Infinity, ease: "linear", duration: 35 }}
+          >
+            {clientsList.concat(clientsList).map((client, i) => (
+              <div key={i} className="flex items-center gap-4 min-w-max group cursor-default">
+                {client.logo ? (
+                  // FIXED: Changed bg-white/5 to bg-white so transparent logos show clearly
+                  <div className="relative h-10 w-10 md:h-12 md:w-12 flex-shrink-0 bg-white p-1.5 rounded-lg border border-white/10 group-hover:border-brand-yellow/50 transition-colors shadow-sm">
+                    <Image 
+                      src={client.logo} 
+                      alt={client.name} 
+                      fill 
+                      className="object-contain rounded-md" 
+                      onError={(e) => e.currentTarget.style.display = 'none'} 
+                    />
+                  </div>
+                ) : (
+                  <div className="w-10 h-10 md:h-12 md:w-12 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 border border-white/10 group-hover:border-brand-yellow/50 transition-colors">
+                    <Star className="h-5 w-5 text-slate-500 group-hover:text-brand-yellow transition-colors" />
+                  </div>
+                )}
+                <span className="text-xl font-bold text-slate-400 group-hover:text-brand-yellow transition-colors">
+                  {client.name}
+                </span>
               </div>
-              {client}
-            </div>
-          ))}
-        </motion.div>
+            ))}
+          </motion.div>
+        </div>
       </section>
 
       {/* 3. INTERACTIVE SERVICES SECTION */}
-      <section className="py-32 relative">
+      <section className="py-32 relative z-10 bg-slate-950/70 border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Our Services</h2>
@@ -224,16 +300,15 @@ export default function HomePage() {
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            {/* Left Side: Clickable Tabs */}
             <div className="space-y-4">
               {servicesData.map((service, index) => (
                 <div 
                   key={index}
                   onClick={() => setActiveTab(index)}
-                  className={`p-6 rounded-2xl cursor-pointer border transition-all duration-300 flex items-center justify-between ${
+                  className={`p-6 rounded-2xl cursor-pointer border transition-all duration-300 flex items-center justify-between bg-slate-900/50 backdrop-blur-sm ${
                     activeTab === index 
-                    ? "bg-brand-yellow/10 border-brand-yellow shadow-[0_0_20px_rgba(245,158,11,0.1)]" 
-                    : "bg-white/5 border-white/10 hover:bg-white/10"
+                    ? "border-brand-yellow shadow-[0_0_20px_rgba(245,158,11,0.1)]" 
+                    : "border-white/10 hover:bg-white/10"
                   }`}
                 >
                   <div className="flex items-center gap-4">
@@ -249,8 +324,7 @@ export default function HomePage() {
               ))}
             </div>
 
-            {/* Right Side: Dynamic Content Reveal */}
-            <div className="bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 h-full min-h-[300px] flex items-center relative overflow-hidden">
+            <div className="bg-slate-900/80 border border-white/10 rounded-3xl p-8 md:p-12 h-full min-h-[300px] flex items-center relative overflow-hidden backdrop-blur-md">
               <div className="absolute top-0 right-0 w-64 h-64 bg-brand-yellow/20 rounded-full blur-[100px] -z-10"></div>
               <AnimatePresence mode="wait">
                 <motion.div
@@ -279,8 +353,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 4. TECH STACK MARQUEE WITH LOGOS */}
-      <section className="py-20 bg-slate-900 border-y border-white/5 overflow-hidden">
+      {/* 4. TECH STACK MARQUEE */}
+      <section className="py-20 bg-slate-900/80 border-b border-white/5 overflow-hidden relative z-10">
         <div className="max-w-7xl mx-auto px-4 text-center mb-10">
           <h2 className="text-2xl font-bold text-white">Powered By Modern Technologies</h2>
         </div>
@@ -292,9 +366,15 @@ export default function HomePage() {
           >
             {techStack.concat(techStack).map((tech, i) => (
               <div key={i} className="flex items-center gap-3 text-slate-400 hover:text-white transition-colors">
-                <div className="p-3 bg-slate-800 rounded-xl">
-                  {tech.icon}
-                </div>
+                {tech.image ? (
+                  <div className="relative w-10 h-10 flex-shrink-0 bg-white p-1 rounded-lg">
+                     <Image src={tech.image} alt={tech.name} fill className="object-contain rounded-md" />
+                  </div>
+                ) : (
+                  <div className="p-3 bg-slate-800 rounded-xl flex-shrink-0">
+                    {tech.icon}
+                  </div>
+                )}
                 <span className="text-2xl font-bold tracking-wider">{tech.name}</span>
               </div>
             ))}
@@ -303,7 +383,7 @@ export default function HomePage() {
       </section>
 
       {/* 5. AUTO-SCROLLING REVIEWS GRID */}
-      <section className="py-32 relative overflow-hidden bg-slate-950">
+      <section className="py-32 relative overflow-hidden bg-slate-950/70 z-10 border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 relative z-10">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Client Success Stories</h2>
@@ -315,15 +395,13 @@ export default function HomePage() {
             <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-950 to-transparent z-10"></div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-full">
-              
-              {/* Column 1 - Scrolls Up */}
               <motion.div 
                 className="flex flex-col gap-8"
                 animate={{ y: ["0%", "-50%"] }}
                 transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
               >
                 {col1.map((testimonial, i) => (
-                  <Card key={i} className="bg-white/5 backdrop-blur-md border-white/10 hover:border-brand-yellow/30 transition-colors shrink-0">
+                  <Card key={i} className="bg-slate-900/90 backdrop-blur-sm border-white/10 hover:border-brand-yellow/30 transition-colors shrink-0">
                     <CardContent className="p-8">
                       <div className="flex mb-4">
                         {[...Array(testimonial.rating)].map((_, j) => (
@@ -340,14 +418,13 @@ export default function HomePage() {
                 ))}
               </motion.div>
 
-              {/* Column 2 - Scrolls Down */}
               <motion.div 
                 className="flex flex-col gap-8 hidden md:flex"
                 animate={{ y: ["-50%", "0%"] }}
                 transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
               >
                 {col2.map((testimonial, i) => (
-                  <Card key={i} className="bg-white/5 backdrop-blur-md border-white/10 hover:border-brand-yellow/30 transition-colors shrink-0">
+                  <Card key={i} className="bg-slate-900/90 backdrop-blur-sm border-white/10 hover:border-brand-yellow/30 transition-colors shrink-0">
                     <CardContent className="p-8">
                       <div className="flex mb-4">
                         {[...Array(testimonial.rating)].map((_, j) => (
@@ -363,23 +440,22 @@ export default function HomePage() {
                   </Card>
                 ))}
               </motion.div>
-
             </div>
           </div>
         </div>
       </section>
 
       {/* CTA SECTION */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-brand-yellow to-yellow-600"></div>
-        <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-20"></div>
+      <section className="py-24 relative overflow-hidden z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-brand-yellow/90 to-yellow-600"></div>
+        <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-30"></div>
         
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <h2 className="text-5xl md:text-7xl font-black text-slate-950 mb-8 leading-tight">
             Ready to Transform Your Business?
           </h2>
           <a href="https://wa.me/94719089368?text=Hi%20I%20am%20interested%20in%20starting%20a%20project" target="_blank" rel="noopener noreferrer">
-            <Button size="lg" className="bg-slate-950 hover:bg-slate-900 text-white font-bold px-10 py-7 text-xl rounded-full shadow-2xl transform hover:scale-105 transition-all">
+            <Button size="lg" className="bg-slate-950 hover:bg-slate-900 text-white font-bold px-10 py-7 text-xl rounded-full shadow-2xl transform hover:scale-105 transition-all border border-slate-800">
               Get Free Consultation
             </Button>
           </a>

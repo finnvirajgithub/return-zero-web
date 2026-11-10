@@ -19,7 +19,7 @@ export default function ProjectsPage() {
   const projects = [
     {
       id: 1,
-      title: "Travel Agency & Tour Operator",
+      title: "Lanka Go Tours",
       category: "Travel Agency",
       description: "Complete digital presence optimization including custom static blog architecture, local SEO schema integration, high-performance caching setup, and official TripAdvisor listing management.",
       link: "https://lankagotours.com",
@@ -31,7 +31,7 @@ export default function ProjectsPage() {
         "Optimized Local SEO schema and business address visibility"
       ],
       year: "2026",
-      client: "Lanka Go Tours | Ella, Sri Lanka",
+      client: "Ella, Sri Lanka",
       duration: "1 months",
     },
     {
@@ -208,22 +208,25 @@ export default function ProjectsPage() {
     },
   ]
 
-  // Update this array anytime to add/remove clients or logos
+  // NEW: Updated Client List with White Background Logos
   const allClientsList = [
-    { name: "Lanka Go Tours", logo: null },
-    { name: "Ceylon Best Travels", logo: "/images/ceylonbesttravels.png" }, 
-    { name: "The Islanders", logo: null },
-    { name: "Ceylon MS Tours", logo: null },
-    { name: "Crown Tours & Travels", logo: "/images/crowntours.jpg" },
-    { name: "Lesley Tuk Tuk Safari", logo: null },
-    { name: "Roam Sri Lanka", logo: "/images/roamsrilanka.png" },
-    { name: "Coffee Dose Kandy", logo: null },
-    { name: "Danu Resort", logo: null },
-    { name: "Kumaru Lanka Tours", logo: "/images/kumaru.png" },
-    { name: "Titan Tours", logo: "/images/Titan.png" },
-    { name: "Sachi Mountain Villa", logo: "/images/sachi.png" },
-    { name: "Wicky Tours", logo: "/images/wicky.png" },
-    { name: "Best Guide Lanka", logo: "/images/bestguidelanka.png" }
+    { name: "Best Guide Lanka", logo: "/companylogos/bestguidelankalogo.png" },
+    { name: "Ceylon Best Travels", logo: "/companylogos/ceylonbestlogo.webp" },
+    { name: "The Islanders Ahangama", logo: "/companylogos/theislanderslogo.png" },
+    { name: "Lesley Tuk Tuk Safari", logo: "/companylogos/lesleytuktuklogo.png" },
+    { name: "Habarana Jeep Safari", logo: "/companylogos/Habaranajeeplogo.png" },
+    { name: "Titan Tours", logo: "/companylogos/titantouslogo.png" },
+    { name: "Wicky Tours Kandy", logo: "/companylogos/wickytourslogo.png" },
+    { name: "Lux Tours Kandy", logo: "/companylogos/luxtourslogo.png" },
+    { name: "Lesley Lanka Horizon Tours", logo: "/companylogos/lesleylankalogo.png" },
+    { name: "Coffe Dose Kandy", logo: "/companylogos/coffedoselogo.png" },
+    { name: "Kumaru Lanka Tours", logo: null },
+    { name: "Gaveesha Tour Kandy", logo: null },
+    { name: "Sachi Mountain Villa", logo: null },
+    { name: "Habarana Lodge", logo: null },
+    { name: "Anuradhapura Tour Guide Chamal", logo: null },
+    { name: "Hill Kandyan Lodge", logo: null },
+    { name: "Elegent Mist Villa", logo: null }
   ]
 
   const filteredProjects =
@@ -232,12 +235,13 @@ export default function ProjectsPage() {
   const categories = ["All", "Travel Agency", "Hotel", "Restaurant"]
   
   const stats = [
-    { number: "70+", label: "Projects Delivered" },
-    { number: "50+", label: "Happy Clients" },
-    { number: "5+", label: "Years Experience" },
-    { number: "300%", label: "Avg. ROI Growth" },
+    { number: "70+", label: "Projects Delivered", icon: <TrendingUp className="h-6 w-6" /> },
+    { number: "50+", label: "Happy Clients", icon: <Users className="h-6 w-6" /> },
+    { number: "5+", label: "Years Experience", icon: <Calendar className="h-6 w-6" /> },
+    { number: "300%", label: "Average ROI Growth", icon: <TrendingUp className="h-6 w-6" /> },
   ]
 
+  // --- Animation Variants ---
   const staggerContainer = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
@@ -249,6 +253,7 @@ export default function ProjectsPage() {
     exit: { opacity: 0, scale: 0.95, transition: { duration: 0.2 } }
   }
 
+  // --- Live Background Particles ---
   const memoizedParticles = useMemo(() => {
     return [...Array(20)].map((_, i) => {
       const size = Math.random() * 15 + 5
@@ -317,7 +322,7 @@ export default function ProjectsPage() {
         </div>
       </section>
 
-      {/* Client Trust Grid (Wall of Fame) WITH LOGO & TEXT TOGETHER */}
+      {/* Client Trust Grid (Wall of Fame) WITH WHITE BG FOR CLEAR LOGOS */}
       <section className="py-20 relative z-10 overflow-hidden bg-slate-950">
         <div className="absolute left-0 top-1/2 w-[300px] h-[300px] bg-brand-yellow/5 rounded-full blur-[100px] -translate-y-1/2 pointer-events-none"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -338,19 +343,20 @@ export default function ProjectsPage() {
                 key={index}
                 variants={cardVariant}
                 whileHover={{ scale: 1.05, y: -5 }}
-                className="flex flex-col items-center justify-center p-4 h-32 text-center rounded-2xl bg-white/5 border border-white/10 hover:border-brand-yellow/50 hover:bg-brand-yellow/10 transition-colors duration-300 cursor-default group shadow-lg overflow-hidden relative gap-2"
+                className="flex flex-col items-center justify-center p-4 h-36 text-center rounded-2xl bg-white hover:bg-gray-50 border border-transparent hover:border-brand-yellow shadow-[0_4px_20px_rgba(0,0,0,0.2)] hover:shadow-[0_10px_25px_rgba(245,158,11,0.2)] transition-all duration-300 cursor-default group overflow-hidden relative gap-3"
               >
                 {client.logo && (
-                  <div className="relative w-12 h-12 flex-shrink-0 flex items-center justify-center mb-1">
+                  <div className="relative w-16 h-16 md:w-20 md:h-20 flex-shrink-0 flex items-center justify-center">
                     <Image
                       src={client.logo}
                       alt={client.name}
                       fill
-                      className="object-contain opacity-90 group-hover:opacity-100 transition-opacity duration-300"
+                      className="object-contain"
+                      onError={(e) => e.currentTarget.style.display = 'none'}
                     />
                   </div>
                 )}
-                <span className={`font-bold text-slate-300 group-hover:text-brand-yellow transition-colors leading-tight ${client.logo ? 'text-xs md:text-sm' : 'text-sm md:text-base'}`}>
+                <span className={`font-bold text-slate-800 group-hover:text-slate-950 transition-colors leading-tight ${client.logo ? 'text-xs md:text-sm' : 'text-sm md:text-base'}`}>
                   {client.name}
                 </span>
               </motion.div>
