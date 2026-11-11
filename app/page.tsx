@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Code, Globe, TrendingUp, ArrowRight, Star, ChevronDown, MapPin, Hotel, LayoutTemplate } from "lucide-react"
+import { Code, Globe, TrendingUp, ArrowRight, Star, ChevronDown, MapPin, Hotel, LayoutTemplate, Database, Server, BarChart } from "lucide-react"
 
 // --- CONSTANTS (Data) ---
 const rotatingServices = [
@@ -40,18 +40,34 @@ const servicesData = [
   },
 ]
 
-// Tech stack now supports actual image logos or fallback icons
-const techStack = [
-  { name: "Next.js", icon: <LayoutTemplate className="h-8 w-8" />, image: null }, 
-  { name: "React", icon: <Code className="h-8 w-8" />, image: null },
-  { name: "Node.js", icon: <Globe className="h-8 w-8" />, image: null },
-  { name: "AWS", icon: <TrendingUp className="h-8 w-8" />, image: null },
-  { name: "Tailwind CSS", icon: <LayoutTemplate className="h-8 w-8" />, image: null },
-  { name: "MongoDB", icon: <Code className="h-8 w-8" />, image: null },
-  { name: "Wordpress", icon: <LayoutTemplate className="h-8 w-8" />, image: null }
+const otaPlatforms = [
+  { name: "TripAdvisor", logo: "/logos/tripadvisor.png" },
+  { name: "Airbnb", logo: "/logos/airbnb.png" },
+  { name: "GetYourGuide", logo: "/logos/gyg.png" },
+  { name: "Agoda", logo: "/logos/agoda.png" },
+  { name: "Booking.com", logo: "/logos/booking.png" },
+  { name: "Expedia", logo: "/logos/expedia.png" },
+  { name: "Viator", logo: "/logos/viator.png" },
+  { name: "ToursByLocals", logo: "/logos/toursbylocalslogo.png" },
+  { name: "TourHQ", logo: "/logos/tourhq.png" },
+  { name: "TourRadar", logo: "/logos/tourradarlogo.png" }
 ]
 
-// Clients list with mixed logos and text
+const techStack = [
+  { name: "Next.js", icon: <LayoutTemplate className="h-8 w-8" />, image: "/toolslogos/nextjslogo.png" }, 
+  { name: "React", icon: <Code className="h-8 w-8" />, image: "/toolslogos/reactjslog.webp" },
+  { name: "Node.js", icon: <Globe className="h-8 w-8" />, image: "/toolslogos/nodejslogo.png" },
+  { name: "Express.js", icon: <Server className="h-8 w-8" />, image: "/toolslogos/expressjslogo.png" },
+  { name: "MongoDB", icon: <Database className="h-8 w-8" />, image: "/toolslogos/mongodblogo.png" },
+  { name: "MySQL", icon: <Database className="h-8 w-8" />, image: "/toolslogos/mysqllogo.png" },
+  { name: "PHP", icon: <Code className="h-8 w-8" />, image: "/toolslogos/phplogo.webp" },
+  { name: "AWS", icon: <TrendingUp className="h-8 w-8" />, image: "/toolslogos/awslogo.webp" },
+  { name: "Docker", icon: <Server className="h-8 w-8" />, image: "/toolslogos/dockerlogo.webp" },
+  { name: "Tailwind CSS", icon: <LayoutTemplate className="h-8 w-8" />, image: "/toolslogos/tailwingcsslogo.png" },
+  { name: "WordPress", icon: <LayoutTemplate className="h-8 w-8" />, image: "/toolslogos/wordpresslogo.webp" },
+  { name: "Google Analytics", icon: <BarChart className="h-8 w-8" />, image: "/toolslogos/googleanalyticslogo.png" }
+]
+
 const clientsList = [
   { name: "Lanka Go Tours", logo: "/companylogos/lankagologo.webp" },
   { name: "Best Guide Lanka", logo: "/companylogos/bestguidelankalogo.png" },
@@ -262,20 +278,27 @@ export default function HomePage() {
           <motion.div 
             className="flex whitespace-nowrap gap-12 px-8 items-center"
             animate={{ x: ["0%", "-50%"] }}
-            transition={{ repeat: Infinity, ease: "linear", duration: 35 }}
+            transition={{ repeat: Infinity, ease: "linear", duration: 80 }} 
           >
             {clientsList.concat(clientsList).map((client, i) => (
               <div key={i} className="flex items-center gap-4 min-w-max group cursor-default">
                 {client.logo ? (
-                  // FIXED: Changed bg-white/5 to bg-white so transparent logos show clearly
                   <div className="relative h-10 w-10 md:h-12 md:w-12 flex-shrink-0 bg-white p-1.5 rounded-lg border border-white/10 group-hover:border-brand-yellow/50 transition-colors shadow-sm">
                     <Image 
                       src={client.logo} 
                       alt={client.name} 
                       fill 
                       className="object-contain rounded-md" 
-                      onError={(e) => e.currentTarget.style.display = 'none'} 
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        if(e.currentTarget.nextElementSibling) {
+                          (e.currentTarget.nextElementSibling as HTMLElement).style.display = 'flex';
+                        }
+                      }} 
                     />
+                    <div className="hidden w-full h-full items-center justify-center text-slate-400">
+                      <Star className="h-5 w-5" />
+                    </div>
                   </div>
                 ) : (
                   <div className="w-10 h-10 md:h-12 md:w-12 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 border border-white/10 group-hover:border-brand-yellow/50 transition-colors">
@@ -353,29 +376,82 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 4. TECH STACK MARQUEE */}
+      {/* NEW SECTION: OTA & BOOKING PLATFORMS GRID */}
+      <section className="py-24 relative z-10 bg-slate-900/40 border-b border-white/5 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">OTA & Booking Platforms</h2>
+            <p className="text-xl text-slate-400 max-w-3xl mx-auto">We manage and optimize your presence across all major global travel networks.</p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+            {otaPlatforms.map((platform, i) => (
+              <motion.div
+                key={i}
+                className="bg-white rounded-2xl p-4 flex flex-col items-center justify-center h-28 shadow-lg border border-transparent hover:border-brand-yellow transition-all hover:scale-105 cursor-default group"
+                animate={{ opacity: [0.6, 1, 0.6] }}
+                transition={{ duration: 4, repeat: Infinity, delay: i * 0.3, ease: "easeInOut" }}
+              >
+                <div className="relative w-full h-full flex items-center justify-center">
+                  <Image
+                    src={platform.logo}
+                    alt={platform.name}
+                    fill
+                    className="object-contain p-2"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      if (e.currentTarget.nextElementSibling) {
+                          (e.currentTarget.nextElementSibling as HTMLElement).style.display = 'block';
+                      }
+                    }}
+                  />
+                  <span className="hidden text-slate-800 font-bold text-center text-sm">{platform.name}</span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 4. TECH STACK MARQUEE (Now with White Background for Logos) */}
       <section className="py-20 bg-slate-900/80 border-b border-white/5 overflow-hidden relative z-10">
         <div className="max-w-7xl mx-auto px-4 text-center mb-10">
           <h2 className="text-2xl font-bold text-white">Powered By Modern Technologies</h2>
         </div>
-        <div className="flex">
+        <div className="flex overflow-hidden w-full">
           <motion.div 
             className="flex whitespace-nowrap gap-16 px-8 items-center"
             animate={{ x: ["0%", "-50%"] }}
-            transition={{ repeat: Infinity, ease: "linear", duration: 25 }}
+            transition={{ repeat: Infinity, ease: "linear", duration: 50 }} 
           >
             {techStack.concat(techStack).map((tech, i) => (
-              <div key={i} className="flex items-center gap-3 text-slate-400 hover:text-white transition-colors">
+              <div key={i} className="flex items-center gap-4 min-w-max group cursor-default">
                 {tech.image ? (
-                  <div className="relative w-10 h-10 flex-shrink-0 bg-white p-1 rounded-lg">
-                     <Image src={tech.image} alt={tech.name} fill className="object-contain rounded-md" />
+                  // FIXED: Added bg-white and padding to make logos pop against dark theme
+                  <div className="relative h-12 w-12 md:h-14 md:w-14 flex-shrink-0 bg-white p-2 rounded-xl border border-white/10 group-hover:border-brand-yellow/50 transition-colors shadow-sm">
+                     <Image 
+                       src={tech.image} 
+                       alt={tech.name} 
+                       fill 
+                       className="object-contain rounded-md" 
+                       onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        if(e.currentTarget.nextElementSibling) {
+                          (e.currentTarget.nextElementSibling as HTMLElement).style.display = 'flex';
+                        }
+                      }} 
+                     />
+                     <div className="hidden w-full h-full items-center justify-center text-slate-400">
+                      <Code className="h-5 w-5" />
+                    </div>
                   </div>
                 ) : (
-                  <div className="p-3 bg-slate-800 rounded-xl flex-shrink-0">
+                  <div className="h-12 w-12 md:h-14 md:w-14 bg-slate-800 rounded-xl flex items-center justify-center flex-shrink-0 border border-white/10 group-hover:border-brand-yellow/50 transition-colors text-brand-yellow">
                     {tech.icon}
                   </div>
                 )}
-                <span className="text-2xl font-bold tracking-wider">{tech.name}</span>
+                <span className="text-2xl font-bold text-slate-400 tracking-wider group-hover:text-brand-yellow transition-colors">
+                  {tech.name}
+                </span>
               </div>
             ))}
           </motion.div>

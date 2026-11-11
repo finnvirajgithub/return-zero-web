@@ -105,14 +105,18 @@ export default function ServicesPage() {
     },
   ]
 
-  const platforms = [
+  // NEW: Updated OTA Platforms Array (Matches Home Page)
+  const otaPlatforms = [
     { name: "TripAdvisor", logo: "/logos/tripadvisor.png" },
-    { name: "Viator", logo: "/logos/viator.png" },
-    { name: "GetYourGuide", logo: "/logos/gyg.png" },
-    { name: "Booking.com", logo: "/logos/booking.png" },
     { name: "Airbnb", logo: "/logos/airbnb.png" },
+    { name: "GetYourGuide", logo: "/logos/gyg.png" },
     { name: "Agoda", logo: "/logos/agoda.png" },
+    { name: "Booking.com", logo: "/logos/booking.png" },
     { name: "Expedia", logo: "/logos/expedia.png" },
+    { name: "Viator", logo: "/logos/viator.png" },
+    { name: "ToursByLocals", logo: "/logos/toursbylocalslogo.png" },
+    { name: "TourHQ", logo: "/logos/tourhq.png" },
+    { name: "TourRadar", logo: "/logos/tourradarlogo.png" }
   ]
 
   const process = [
@@ -123,7 +127,7 @@ export default function ServicesPage() {
     { step: "05", title: "Launch & Scale", description: "Smooth deployment followed by continuous support, analytics tracking, and scaling." },
   ]
 
-  // Data for Framer Motion Floating Logos
+  // Data for Framer Motion Floating Logos (in Hero)
   const floatingLogos = [
     { src: "/logos/airbnb.png", alt: "Airbnb", left: "8%", duration: 14, delay: 0, size: 60 },
     { src: "/logos/booking.png", alt: "Booking.com", left: "22%", duration: 18, delay: 4, size: 70 },
@@ -172,7 +176,7 @@ export default function ServicesPage() {
         <div className="absolute inset-0 z-0 pointer-events-none">{memoizedDots}</div>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-brand-yellow/10 rounded-full blur-[150px] pointer-events-none"></div>
         
-        {/* FIXED: Animated Floating Logos Background (Framer Motion) */}
+        {/* Animated Floating Logos Background (Framer Motion) */}
         <div className="absolute inset-0 z-0 pointer-events-none opacity-80 overflow-hidden">
           {floatingLogos.map((logo, index) => (
             <motion.div
@@ -184,7 +188,6 @@ export default function ServicesPage() {
                 height: logo.size + 20,
                 filter: "drop-shadow(0px 0px 15px rgba(245,158,11,0.2))",
               }}
-              // y: "120vh" starts it strictly below the screen, avoiding the stuck flicker
               initial={{ y: "120vh", rotate: -10, scale: 0.8, opacity: 0 }}
               animate={{
                 y: ["120vh", "-20vh"],
@@ -197,7 +200,7 @@ export default function ServicesPage() {
                 repeat: Infinity,
                 delay: logo.delay,
                 ease: "linear",
-                times: [0, 0.15, 0.85, 1] // Controls when opacity fades in and out smoothly
+                times: [0, 0.15, 0.85, 1] 
               }}
             >
               <div className="relative w-full h-full">
@@ -413,8 +416,45 @@ export default function ServicesPage() {
         </div>
       </section>
 
+      {/* NEW SECTION: OTA & BOOKING PLATFORMS GRID (Replaces old marquee) */}
+      <section className="py-24 relative z-10 bg-slate-900/40 border-y border-white/5 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">OTA & Booking Platforms</h2>
+            <p className="text-xl text-slate-400 max-w-3xl mx-auto">We manage and optimize your presence across all major global travel networks.</p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+            {otaPlatforms.map((platform, i) => (
+              <motion.div
+                key={i}
+                className="bg-white rounded-2xl p-4 flex flex-col items-center justify-center h-28 shadow-lg border border-transparent hover:border-brand-yellow transition-all hover:scale-105"
+                animate={{ opacity: [0.6, 1, 0.6] }}
+                transition={{ duration: 4, repeat: Infinity, delay: i * 0.3, ease: "easeInOut" }}
+              >
+                <div className="relative w-full h-full flex items-center justify-center">
+                  <Image
+                    src={platform.logo}
+                    alt={platform.name}
+                    fill
+                    className="object-contain p-2"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      if (e.currentTarget.nextElementSibling) {
+                          (e.currentTarget.nextElementSibling as HTMLElement).style.display = 'block';
+                      }
+                    }}
+                  />
+                  {/* Fallback text if image fails to load */}
+                  <span className="hidden text-slate-800 font-bold text-center text-sm">{platform.name}</span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Process Section (Agile Timeline) */}
-      <section className="py-24 bg-slate-900 border-y border-white/5 relative overflow-hidden z-10">
+      <section className="py-24 bg-slate-950 relative overflow-hidden z-10">
         <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-10"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div 
@@ -434,7 +474,7 @@ export default function ServicesPage() {
                 {index !== process.length - 1 && (
                   <div className="hidden md:block absolute top-8 left-1/2 w-full h-[2px] bg-white/10 -z-10 group-hover:bg-brand-yellow/50 transition-colors duration-500"></div>
                 )}
-                <div className="mx-auto mb-6 w-16 h-16 bg-slate-950 border-2 border-brand-yellow rounded-full flex items-center justify-center text-brand-yellow font-black text-2xl group-hover:bg-brand-yellow group-hover:text-slate-950 transition-all duration-300 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+                <div className="mx-auto mb-6 w-16 h-16 bg-slate-900 border-2 border-brand-yellow rounded-full flex items-center justify-center text-brand-yellow font-black text-2xl group-hover:bg-brand-yellow group-hover:text-slate-950 transition-all duration-300 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
                   {step.step}
                 </div>
                 <h3 className="text-xl font-bold mb-3 text-white group-hover:text-brand-yellow transition-colors">{step.title}</h3>
@@ -445,25 +485,8 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* OTA Logos Wall */}
-      <section className="py-20 bg-slate-950 relative z-10 border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-10">Platforms We Optimize & Manage</p>
-          <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16">
-            {platforms.map((platform, index) => (
-              <div 
-                key={index} 
-                className="w-32 h-12 md:w-48 md:h-16 relative flex items-center justify-center transition-all duration-500 hover:scale-110 opacity-80 hover:opacity-100 hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] cursor-pointer"
-              >
-                <Image src={platform.logo} alt={platform.name} fill className="object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Final CTA Section */}
-      <section className="py-24 relative overflow-hidden z-10">
+      <section className="py-24 relative overflow-hidden z-10 border-t border-white/5">
         <div className="absolute inset-0 bg-gradient-to-br from-brand-yellow/20 to-transparent"></div>
         <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-20"></div>
         
