@@ -19,7 +19,7 @@ import {
   Briefcase, MapPin, Clock, DollarSign, Users, Zap, Heart, 
   GraduationCap, ArrowRight, CheckCircle, Code, MessageCircle
 } from "lucide-react"
-import emailjs from "@emailjs/browser"
+// EmailJS import eka ain kala
 
 interface JobPosition {
   id: string
@@ -164,31 +164,25 @@ export default function CareersPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const handleApply = async (e: React.FormEvent) => {
+  const handleApply = (e: React.FormEvent) => {
     e.preventDefault()
     setIsApplying(true)
 
-    const templateParams = {
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone || "Not provided",
-      portfolio: formData.portfolio || "Not provided",
-      message: formData.message,
-      job_title: selectedJob?.title || "General Application",
-      job_department: selectedJob?.department || "N/A",
-      job_location: selectedJob?.location || "N/A",
-    }
+    // Methana thamai Direct Email App eka open wena logic eka thiyenne
+    const jobTitle = selectedJob?.title || "General Application"
+    const targetEmail = "contact@returnzerosolutions.com" // Oyage email eka methanata danna
+    const subject = encodeURIComponent(`Job Application: ${jobTitle} - ${formData.name}`)
+    const body = encodeURIComponent(`Hello Return Zero Team,\n\nI am submitting my application for the ${jobTitle} role.\n\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone || "Not provided"}\nPortfolio/LinkedIn: ${formData.portfolio || "Not provided"}\n\nWhy I am a good fit:\n${formData.message}\n\n\nLooking forward to hearing from you.`)
+    
+    // Open default mail client (Gmail/Outlook etc)
+    window.location.href = `mailto:${targetEmail}?subject=${subject}&body=${body}`
 
-    try {
-      await emailjs.send("service_4np4c87", "template_sdvo4wb", templateParams, "-slcF47WslD-a1KcO")
+    // Show success message immediately after opening mail client
+    setTimeout(() => {
       setApplicationSubmitted(true)
       setFormData({ name: "", email: "", phone: "", portfolio: "", message: "" })
-    } catch (error) {
-      console.error(error)
-      alert("Something went wrong. Please try again or contact us via WhatsApp.")
-    }
-
-    setIsApplying(false)
+      setIsApplying(false)
+    }, 1000)
   }
 
   const handleDialogClose = (isOpen: boolean) => {
@@ -403,13 +397,13 @@ export default function CareersPage() {
                     <AnimatePresence>
                       <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10 bg-brand-yellow/10 rounded-2xl border border-brand-yellow/20">
                         <CheckCircle className="h-16 w-16 text-brand-yellow mx-auto mb-4" />
-                        <h3 className="text-2xl font-bold text-white mb-2">Application Received!</h3>
-                        <p className="text-slate-300 max-w-md mx-auto">Thank you for your interest in joining Return Zero. Our team will review your profile and get back to you soon.</p>
+                        <h3 className="text-2xl font-bold text-white mb-2">Draft Started!</h3>
+                        <p className="text-slate-300 max-w-md mx-auto">Your email app has been opened with your details. Just hit send from your email client.</p>
                       </motion.div>
                     </AnimatePresence>
                   ) : (
                     <div className="bg-slate-950/50 p-6 md:p-8 rounded-2xl border border-white/5">
-                      <h4 className="text-xl font-bold text-white mb-6">Submit Your Application</h4>
+                      <h4 className="text-xl font-bold text-white mb-6">Draft Your Application</h4>
                       <form onSubmit={handleApply} className="space-y-5">
                         <div className="grid md:grid-cols-2 gap-5">
                           <div className="space-y-2">
@@ -440,9 +434,9 @@ export default function CareersPage() {
                         
                         <Button type="submit" disabled={isApplying} className="w-full bg-brand-yellow hover:bg-yellow-400 text-slate-950 font-bold text-lg py-6 rounded-xl mt-4">
                           {isApplying ? (
-                            <><div className="animate-spin rounded-full h-5 w-5 border-b-2 border-slate-950 mr-3" /> Sending Application...</>
+                            <><div className="animate-spin rounded-full h-5 w-5 border-b-2 border-slate-950 mr-3" /> Opening Email Client...</>
                           ) : (
-                            "Submit Application"
+                            "Draft Application in Email"
                           )}
                         </Button>
                       </form>

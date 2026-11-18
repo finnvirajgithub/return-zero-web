@@ -8,8 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { Mail, Phone, MapPin, Clock, Send, MessageSquare, Headphones, CheckCircle, AlertCircle, ChevronDown, ArrowRight } from "lucide-react"
-import emailjs from '@emailjs/browser'
+import { Mail, Phone, MapPin, Clock, Send, MessageSquare, Headphones, CheckCircle, AlertCircle, ChevronDown } from "lucide-react"
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -29,39 +28,36 @@ export default function ContactPage() {
     message: "",
   })
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // FIXED: Changed from emailJS to mailto: for direct email client opening (No limits!)
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
     setSubmitStatus(null)
 
-    const templateParams = {
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone || "Not provided",
-      service: formData.service,
-      message: formData.message,
-    }
+    const targetEmail = "contact@returnzerosolutions.com"
+    const subject = encodeURIComponent(`New Inquiry: ${formData.service || 'General'} - ${formData.name}`)
+    const body = encodeURIComponent(
+      `Hello Return Zero Team,\n\nI am reaching out regarding a new project.\n\n` +
+      `Name: ${formData.name}\n` +
+      `Email: ${formData.email}\n` +
+      `Phone: ${formData.phone || "Not provided"}\n` +
+      `Service: ${formData.service}\n\n` +
+      `Message Details:\n${formData.message}\n\n` +
+      `Looking forward to hearing from you.`
+    )
+    
+    // Open default mail client (Gmail/Outlook etc)
+    window.location.href = `mailto:${targetEmail}?subject=${subject}&body=${body}`
 
-    try {
-      await emailjs.send(
-        'service_4np4c87',
-        'template_5rpsjvk',
-        templateParams,
-        '-slcF47WslD-a1KcO'
-      )
+    // Show success message immediately after opening mail client
+    setTimeout(() => {
       setSubmitStatus({
         type: "success",
-        message: "Thank you! Your message has been sent successfully. We will get back to you soon.",
+        message: "Email client opened! Please hit send to deliver your message.",
       })
       setFormData({ name: '', email: '', phone: '', service: '', message: '' })
-    } catch (error) {
-      console.error(error)
-      setSubmitStatus({
-        type: "error",
-        message: "Oops! Something went wrong. Please try again or contact us via WhatsApp.",
-      })
-    }
-    setIsSubmitting(false)
+      setIsSubmitting(false)
+    }, 1000)
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -166,7 +162,7 @@ export default function ContactPage() {
                     Send us a Message
                   </CardTitle>
                   <CardDescription className="text-base text-slate-400 mt-4 leading-relaxed">
-                    Fill out the form below and our team will get back to you within 24 hours.
+                    Fill out the form below and we will open your email client to draft a message to our team.
                   </CardDescription>
                 </CardHeader>
                 
@@ -206,9 +202,9 @@ export default function ContactPage() {
 
                     <Button type="submit" disabled={isSubmitting} className="w-full bg-brand-yellow hover:bg-yellow-400 text-slate-950 font-bold py-7 text-lg rounded-xl transition-all shadow-[0_0_15px_rgba(245,158,11,0.2)]">
                       {isSubmitting ? (
-                        <><div className="animate-spin rounded-full h-5 w-5 border-b-2 border-slate-950 mr-3"></div> Sending Message...</>
+                        <><div className="animate-spin rounded-full h-5 w-5 border-b-2 border-slate-950 mr-3"></div> Opening Email Client...</>
                       ) : (
-                        <>Send Message <Send className="ml-2 h-5 w-5" /></>
+                        <>Draft Message in Email <Send className="ml-2 h-5 w-5" /></>
                       )}
                     </Button>
 
