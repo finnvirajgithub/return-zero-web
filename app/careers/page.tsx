@@ -17,9 +17,8 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import {
   Briefcase, MapPin, Clock, DollarSign, Users, Zap, Heart, 
-  GraduationCap, ArrowRight, CheckCircle, Code, MessageCircle
+  GraduationCap, ArrowRight, CheckCircle, Code, MessageCircle, Paperclip
 } from "lucide-react"
-// EmailJS import eka ain kala
 
 interface JobPosition {
   id: string
@@ -137,7 +136,6 @@ const benefits = [
   { icon: <Zap className="h-6 w-6" />, title: "Exciting Projects", description: "Work on diverse projects for travel and hospitality industries" },
 ]
 
-// --- Animation Variants ---
 const staggerContainer = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
@@ -156,7 +154,6 @@ export default function CareersPage() {
     name: "",
     email: "",
     phone: "",
-    portfolio: "",
     message: "",
   })
 
@@ -168,19 +165,24 @@ export default function CareersPage() {
     e.preventDefault()
     setIsApplying(true)
 
-    // Methana thamai Direct Email App eka open wena logic eka thiyenne
     const jobTitle = selectedJob?.title || "General Application"
-    const targetEmail = "contact@returnzerosolutions.com" // Oyage email eka methanata danna
+    const targetEmail = "contact@returnzerosolutions.com"
     const subject = encodeURIComponent(`Job Application: ${jobTitle} - ${formData.name}`)
-    const body = encodeURIComponent(`Hello Return Zero Team,\n\nI am submitting my application for the ${jobTitle} role.\n\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone || "Not provided"}\nPortfolio/LinkedIn: ${formData.portfolio || "Not provided"}\n\nWhy I am a good fit:\n${formData.message}\n\n\nLooking forward to hearing from you.`)
+    const body = encodeURIComponent(
+      `Hello Return Zero Team,\n\nI am submitting my application for the ${jobTitle} role.\n\n` +
+      `Name: ${formData.name}\n` +
+      `Email: ${formData.email}\n` +
+      `Phone / WhatsApp: ${formData.phone || "Not provided"}\n\n` +
+      `Why I am a good fit:\n${formData.message}\n\n` +
+      `[Please attach your CV (PDF/DOC) to this email before sending]\n\n` +
+      `Looking forward to hearing from you.`
+    )
     
-    // Open default mail client (Gmail/Outlook etc)
     window.location.href = `mailto:${targetEmail}?subject=${subject}&body=${body}`
 
-    // Show success message immediately after opening mail client
     setTimeout(() => {
       setApplicationSubmitted(true)
-      setFormData({ name: "", email: "", phone: "", portfolio: "", message: "" })
+      setFormData({ name: "", email: "", phone: "", message: "" })
       setIsApplying(false)
     }, 1000)
   }
@@ -189,11 +191,10 @@ export default function CareersPage() {
     if (!isOpen) {
       setSelectedJob(null)
       setApplicationSubmitted(false)
-      setFormData({ name: "", email: "", phone: "", portfolio: "", message: "" })
+      setFormData({ name: "", email: "", phone: "", message: "" })
     }
   }
 
-  // --- Live Background Particles ---
   const memoizedParticles = useMemo(() => {
     return [...Array(15)].map((_, i) => {
       const size = Math.random() * 10 + 5
@@ -395,10 +396,12 @@ export default function CareersPage() {
                 <div className="pt-6 mt-6 border-t border-white/5">
                   {applicationSubmitted ? (
                     <AnimatePresence>
-                      <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10 bg-brand-yellow/10 rounded-2xl border border-brand-yellow/20">
+                      <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10 bg-brand-yellow/10 rounded-2xl border border-brand-yellow/20 px-4">
                         <CheckCircle className="h-16 w-16 text-brand-yellow mx-auto mb-4" />
-                        <h3 className="text-2xl font-bold text-white mb-2">Draft Started!</h3>
-                        <p className="text-slate-300 max-w-md mx-auto">Your email app has been opened with your details. Just hit send from your email client.</p>
+                        <h3 className="text-2xl font-bold text-white mb-2">Email Draft Opened!</h3>
+                        <p className="text-slate-300 max-w-md mx-auto">
+                          Your email app has been opened with your details. <strong className="text-brand-yellow">Don't forget to attach your CV (PDF/DOC)</strong> before hitting send!
+                        </p>
                       </motion.div>
                     </AnimatePresence>
                   ) : (
@@ -416,25 +419,27 @@ export default function CareersPage() {
                           </div>
                         </div>
                         
-                        <div className="grid md:grid-cols-2 gap-5">
-                          <div className="space-y-2">
-                            <label className="text-sm font-semibold text-slate-300">WhatsApp / Phone</label>
-                            <Input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+94 7X XXX XXXX" className="bg-slate-900 border-white/10 text-white focus-visible:ring-brand-yellow" />
-                          </div>
-                          <div className="space-y-2">
-                            <label className="text-sm font-semibold text-slate-300">Portfolio / LinkedIn</label>
-                            <Input type="url" name="portfolio" value={formData.portfolio} onChange={handleChange} placeholder="https://..." className="bg-slate-900 border-white/10 text-white focus-visible:ring-brand-yellow" />
-                          </div>
+                        <div className="space-y-2">
+                          <label className="text-sm font-semibold text-slate-300">WhatsApp / Phone</label>
+                          <Input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+94 7X XXX XXXX" className="bg-slate-900 border-white/10 text-white focus-visible:ring-brand-yellow" />
                         </div>
 
                         <div className="space-y-2">
                           <label className="text-sm font-semibold text-slate-300">Why are you a good fit? <span className="text-brand-yellow">*</span></label>
                           <Textarea required name="message" value={formData.message} onChange={handleChange} placeholder="Tell us briefly about your experience..." rows={4} className="bg-slate-900 border-white/10 text-white focus-visible:ring-brand-yellow resize-none" />
                         </div>
+
+                        {/* CV Attachment Reminder Box */}
+                        <div className="flex items-start gap-3 p-4 rounded-xl bg-brand-yellow/10 border border-brand-yellow/30 text-sm text-slate-200">
+                          <Paperclip className="h-5 w-5 text-brand-yellow flex-shrink-0 mt-0.5" />
+                          <p>
+                            <span className="font-bold text-brand-yellow">Note:</span> Clicking submit will open your email app with your details pre-filled. Please <span className="font-semibold text-white">attach your CV (PDF/DOC)</span> there before sending.
+                          </p>
+                        </div>
                         
-                        <Button type="submit" disabled={isApplying} className="w-full bg-brand-yellow hover:bg-yellow-400 text-slate-950 font-bold text-lg py-6 rounded-xl mt-4">
+                        <Button type="submit" disabled={isApplying} className="w-full bg-brand-yellow hover:bg-yellow-400 text-slate-950 font-bold text-lg py-6 rounded-xl mt-2">
                           {isApplying ? (
-                            <><div className="animate-spin rounded-full h-5 w-5 border-b-2 border-slate-950 mr-3" /> Opening Email Client...</>
+                            <><div className="animate-spin rounded-full h-5 w-5 border-b-2 border-slate-950 mr-3" /> Opening Email App...</>
                           ) : (
                             "Draft Application in Email"
                           )}
